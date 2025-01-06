@@ -25,8 +25,13 @@ const grievanceSchema= new Schema(
         proof:{
             type: String
         }
+    },
+    {
+        timestamps: true 
     }
 );
 
 //Define Grievance Model
-const Grievance= mongoose.model('Grievance', grievanceSchema);
+const Grievance = mongoose.model('Grievance', grievanceSchema);
+
+module.exports = { Grievance }

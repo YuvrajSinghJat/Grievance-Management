@@ -37,10 +37,16 @@ const employeeSchema = new Schema(
     password: { 
       type: String, 
       required: true 
+    },
+    refreshToken: { 
+      type: String
+    },
+    accessToken: { 
+      type: String
     }
   },
   {
-    
+    timestamps: true 
   }
 );
 
