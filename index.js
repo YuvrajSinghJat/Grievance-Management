@@ -3,9 +3,21 @@ require('dotenv').config({
 })
 const express = require("express")
 const app = express()
+
+const path = require("path");
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 const mongoose = require("mongoose");
 const { dbConnect } = require('./databaseConfig/connect.database.js');
-const { userRouter } = require('./routes/user/user.route.js');
+const { studentRouter } = require('./routes/user/student/student.route.js');
+const { employeeRouter } = require('./routes/user/employee/employee.route.js');
+const { adminRouter } = require('./routes/admin/admin.route.js');
 
 const port = process.env.PORT || 8080;
 
@@ -23,11 +35,10 @@ app.listen(port,()=>{
     console.log("Server is listeming TO PORT = ",port)
 })
 
-//Tow makes gateway for users
-app.use("/",userRouter);
-app.use("/admin");
-
-
+//Tow makes gateway for users --
+app.use("/student",studentRouter);
+app.use("/employee",employeeRouter);
+app.use("/admin",adminRouter)
 
 
 // app.get("/home",(req,res)=>{

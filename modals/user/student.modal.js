@@ -1,38 +1,37 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema();
+const Schema = mongoose.Schema;
+const jwt = require("jsonwebtoken")
 
 // Define Studente Schema
-const studentSchema= new Schema(
+const studentSchema = Schema(
   {
-    enrollmentno: { 
+    enrollmentNo: { 
       type: String, 
       required: true, 
       unique: true 
     },
-    scholarno: { 
+    scholarNo: { 
       type: Number, 
-      required: true, 
-      unique: true 
+      
     },
-    studentname: { 
+    studentName: { 
       type: String, 
       required: true 
     },
     program:{
       type: String,
-      required: true
+
     },
     department: { 
       type: String, 
-      required: true 
+
     },
     faculty: { 
       type: String, 
-      required: true 
+
     },
-    mobile: { 
+    mobileNo: { 
       type: Number, 
-      required: true 
     },
     email: { 
       type: String, 
@@ -45,23 +44,36 @@ const studentSchema= new Schema(
     },
     parentName: { 
       type: String, 
-      required: true 
     },
-    parentContact:{
+    parentContactNo:{
       type: Number,
-      required: true
     },
     refreshToken: { 
       type: String
-    },
-    accessToken: { 
-      type: String
-    },
+    }
   },
   {
     timestamps: true 
   }
 );
+
+studentSchema.methods.generateAccessToken = function (){
+    jwt.sign({
+        _id : this._id
+      },
+      process.env.ACCESS_TOKEN_SECRETKEY,
+      process.env.ACCESS_TOKEN_EXPIRY
+  )
+}
+
+studentSchema.methods.generateRefreshToken = function (){
+    jwt.sign({
+      _id : this._id
+    },
+    process.env.REFRESH_TOKEN_SECRETKEY,
+    process.env.REFRESH_TOKEN_EXPIRY
+    )
+}
 
 // Define Student Model
 const Student = mongoose.model('Student', studentSchema);

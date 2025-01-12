@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const Schema= mongoose.Schema();
+const Schema= mongoose.Schema;
 
 //Define Grievance schema
-const grievanceSchema= new Schema(
+const grievanceSchema= Schema(
     {
         grievanceid:{
             type: Number,

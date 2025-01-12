@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema();
+const Schema = mongoose.Schema;
 
 // Define Employee Schema
-const employeeSchema = new Schema(
+const employeeSchema = Schema(
   {
-    empid: { 
+    empId: { 
       type: Number, 
       required: true, 
       unique: true 
     },
-    empname: {
+    empName: {
       type: String, 
       required: true 
     },
@@ -25,7 +25,7 @@ const employeeSchema = new Schema(
       type: String, 
       required: true 
     },
-    mobile: { 
+    mobileNo: { 
       type: Number, 
       required: true 
     },
@@ -39,9 +39,6 @@ const employeeSchema = new Schema(
       required: true 
     },
     refreshToken: { 
-      type: String
-    },
-    accessToken: { 
       type: String
     }
   },

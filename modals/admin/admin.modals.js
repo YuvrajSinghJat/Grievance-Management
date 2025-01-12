@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema();
+const Schema = mongoose.Schema;
 
 // Define admin Schema
-const adminSchema = new mongoose.Schema(
+const adminSchema = new Schema(
   {
     adminid: { 
       type: Number, 
       required: true, 
       unique: true 
     },
-    adminname: { 
+    adminName: { 
       type: String, 
       required: true 
     },
@@ -25,14 +25,15 @@ const adminSchema = new mongoose.Schema(
       type: String, 
       required: true 
     },
-    mobile: { 
+    mobileNo: { 
       type: Number, 
       required: true 
     },
     email: { 
       type: String, 
       required: true, 
-      unique: true },
+      unique: true 
+    },
     password: { 
       type: String, 
       required: true 
@@ -42,3 +43,5 @@ const adminSchema = new mongoose.Schema(
 
 // Define Employee Model
 const Admin = mongoose.model('Admin', adminSchema);
+
+module.exports = { Admin }
