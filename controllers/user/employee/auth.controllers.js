@@ -73,11 +73,48 @@ const options = {
 
 
 const employeeSignin = asyncHandler( async (req,res) =>{
-    
+    let email=req.body.email;
+    let password=req.body.password;
+
+    const findEmployeeToLogin=await Employee.findOne({
+        email:email,
+        password: password
+    }).select("-password")
+    if(!findEmployeeToLogin){
+        throw new ApiError(404,"Employee not found!")
+    }
+    const {accessToken, refreshToken}= await createAccessandRefreshToken(findEmployeeToLogin._id)
+    const findLoggedEmployee= Employee.findById(findEmployeeToLogin._id).select("-password -refreshToken")
+
+    if(!findLoggedEmployee){
+        throw new ApiError(404,"Employee not forund after generation of token")
+    }
+    return res.status(200)
+    .cookie("accessToken",accessToken,options)
+    .cookie("refreshToken",refreshToken,options)
+    .json(
+        new ApiResponse(200,findLoggedEmployee,"User fetched successfully with login")
+    )
 })
 
 const employeeLogout = asyncHandler ( async (req,res)=>{
-    
+    console.log(req.verificationOfEmployee._id)
+    await Employee.findByIdAndUpdate(
+        req.verificationOfEmployee._id,
+        {
+            $set : {
+                refreshToken : undefined
+            }
+        },
+        {
+            new : true
+        }
+    )
+    return res
+    .status(200)
+    .clearCookie(accessToken,options)
+    .clearCookie(refreshToken,options)
+    .send(200,{},"Employee logged out successfully")
 })
 
 

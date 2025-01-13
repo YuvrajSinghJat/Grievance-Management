@@ -102,7 +102,7 @@ const signin = asyncHandler( async (req,res) =>{
 
     if(!findStudentToLogin)
     {
-        throw new ApiError(404,"user not found!")
+        throw new ApiError(404,"User not found!")
     }
 
     const {accessToken,refreshToken} = await createAccessAndRefeshToken(findStudentToLogin._id)
