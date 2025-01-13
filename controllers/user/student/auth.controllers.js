@@ -107,7 +107,7 @@ const signin = asyncHandler( async (req,res) =>{
 
     const {accessToken,refreshToken} = await createAccessAndRefeshToken(findStudentToLogin._id)
 
-    const findLoggedUser = Student.findById(findStudentToLogin._id).select("-password -refreshToken")
+    const findLoggedUser = await Student.findById(findStudentToLogin._id).select("-password -refreshToken")
 
     if(!findLoggedUser)
     {
