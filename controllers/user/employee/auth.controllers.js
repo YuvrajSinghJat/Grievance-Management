@@ -73,18 +73,18 @@ const options = {
 
 
 const employeeSignin = asyncHandler( async (req,res) =>{
-    let email=req.body.email;
+    let email = req.body.email;
     let password=req.body.password;
 
-    const findEmployeeToLogin=await Employee.findOne({
+    const findEmployeeToLogin = await Employee.findOne({
         email:email,
         password: password
     }).select("-password")
     if(!findEmployeeToLogin){
         throw new ApiError(404,"Employee not found!")
     }
-    const {accessToken, refreshToken}= await createAccessandRefreshToken(findEmployeeToLogin._id)
-    const findLoggedEmployee= Employee.findById(findEmployeeToLogin._id).select("-password -refreshToken")
+    const {accessToken, refreshToken} = await createAccessandRefreshToken(findEmployeeToLogin._id)
+    const findLoggedEmployee= await Employee.findById(findEmployeeToLogin._id).select("-password -refreshToken")
 
     if(!findLoggedEmployee){
         throw new ApiError(404,"Employee not forund after generation of token")
@@ -98,9 +98,9 @@ const employeeSignin = asyncHandler( async (req,res) =>{
 })
 
 const employeeLogout = asyncHandler ( async (req,res)=>{
-    console.log(req.verificationOfEmployee._id)
+    console.log(req.verificationOfUser._id)
     await Employee.findByIdAndUpdate(
-        req.verificationOfEmployee._id,
+        req.verificationOfUser._id,
         {
             $set : {
                 refreshToken : undefined

@@ -10,7 +10,7 @@ const adminSignin = asyncHandler(async ( req,res )=>{
     let email = req.body.email;
     let password = req.body.password;
 
-    const adminToLogin= await Admin.findOne({
+    const adminToLogin = await Admin.findOne({
         email: email,
         password: password
     }).select("-password")
@@ -18,15 +18,16 @@ const adminSignin = asyncHandler(async ( req,res )=>{
         throw new ApiError(404,"Admin not found!")
     }
 
-    const {accessToken,refreshToken}= await createAccessAndRefreshToken(findAdminToLogin._id)
-    const findLoggedAdmin = Admin.findId(findAdminToLogin._id).select("-password -refreshToken")
+    const {accessToken,refreshToken} = await createAccessAndRefreshToken(adminToLogin._id)
+
+    const findLoggedAdmin = await Admin.findById(adminToLogin._id).select("-password -refreshToken")
     if(!findLoggedAdmin){
         throw new ApiError(404,"Admin not forund after token generation")
     } 
     return res
     .status(200)
     .cookie("accessToken",accessToken,options)
-    .cookie("refreshToken",refreshToken.options)
+    .cookie("refreshToken",refreshToken,options)
     .json(
         new ApiResponse(200,findLoggedAdmin,"Admin logged in successfully")
     )
@@ -34,9 +35,9 @@ const adminSignin = asyncHandler(async ( req,res )=>{
 
 
 const adminLogout = asyncHandler( async(req,res)=>{
-    console.log(req.verificationOfAdmin._id)
+    console.log(req.verificationOfUser._id)
     await Admin.findByIdAndUpdate(
-        req.verificationOfAdmin._id,
+        req.verificationOfUser._id,
         {
             $set:{
                 refreshToken: undefined
