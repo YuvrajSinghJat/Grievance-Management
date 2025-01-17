@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // Define admin Schema
 const adminSchema = new Schema(
   {
-    adminid: { 
+    adminId: { 
       type: Number, 
       required: true, 
       unique: true 
@@ -13,28 +13,28 @@ const adminSchema = new Schema(
       type: String, 
       required: true 
     },
-    designation: { 
+    adminDesignation: { 
       type: String, 
       required: true 
     },
-    department: { 
+    adminDepartment: { 
       type: String, 
       required: true 
     },
-    faculty: { 
+    adminFaculty: { 
       type: String, 
       required: true 
     },
-    mobileNo: { 
+    adminMobileNo: { 
       type: Number, 
       required: true 
     },
-    email: { 
+    adminEmail: { 
       type: String, 
       required: true, 
       unique: true 
     },
-    password: { 
+    adminPassword:{
       type: String, 
       required: true 
     }

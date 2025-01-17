@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+/*const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 //Define schema for grievanceStatus
@@ -26,4 +26,4 @@ const grievanceStatusSchema = Schema(
         //Define Grievance Status Model
         const GrievanceStatus = mongoose.model('GrievanceStatus', grievanceStatusSchema);
         
-        module.exports = { GrievanceStatus }
+        module.exports = { GrievanceStatus }*/

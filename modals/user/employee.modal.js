@@ -13,28 +13,28 @@ const employeeSchema = Schema(
       type: String, 
       required: true 
     },
-    designation: { 
+    empDesignation: { 
       type: String, 
       required: true 
     },
-    department: { 
+    empDepartment: { 
       type: String, 
       required: true 
     },
-    faculty: { 
+    empFaculty: { 
       type: String, 
       required: true 
     },
-    mobileNo: { 
+    empMobileNo: { 
       type: Number, 
       required: true 
     },
-    email: { 
+    empEmail: { 
       type: String, 
       required: true, 
       unique: true 
     },
-    password: { 
+    empPassword: { 
       type: String, 
       required: true 
     },
