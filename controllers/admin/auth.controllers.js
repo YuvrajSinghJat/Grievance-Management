@@ -53,7 +53,6 @@ const adminLogout = asyncHandler( async(req,res)=>{
     .send(200,{},"User logout properly")
 })
 
-
 module.exports = {
     adminSignin,
     adminLogout
