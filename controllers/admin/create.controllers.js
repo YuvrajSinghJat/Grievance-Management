@@ -10,16 +10,15 @@ const options = {
     secure : true
 }
 //createAdmin controller
-const createAdmin=asyncHandler(async (req,res,next) =>{
+const createAdmin = asyncHandler(async (req,res,next) =>{
     const {
         adminId,
         adminName,
         adminDesignation,
-        adminFaculty,
         adminMobileNo,
         adminEmail,
         adminPassword
-    }=req.body;
+    } = req.body;
 
     const existingAdmin= await Admin.findOne({$or:[{adminEmail},{adminId}]});
     if(existingAdmin){
@@ -74,3 +73,9 @@ const createEmployee= asyncHandler(async(req, res, next)=>{
     const response=new ApiResponse(201, newEmp, "Employee created successfully");
     return res.status(201).json(response);
 })
+
+module.exports = {
+    createAdmin,
+    createEmployee,
+    
+}

@@ -1,6 +1,7 @@
 const express = require("express")
 const { signup, signin, logout } = require("../../../controllers/user/student/auth.controllers.js")
 const { verifyStudentJWT } = require("../../../middlewares/auth.middleware.js")
+const { fileGreviances, viewAllGrievances, viewSingleGreviances } = require("../../../controllers/user/student/greviance.controllers.js")
 const studentRouter = express.Router()
 
 studentRouter.route("/signup")
@@ -11,6 +12,15 @@ studentRouter.route("/signin")
 
 studentRouter.route("/logout")
 .post(verifyStudentJWT , logout)
+
+studentRouter.route("/fileGreviances")
+.post(verifyStudentJWT ,fileGreviances)
+
+studentRouter.route("/viewallgreviances")
+.post(verifyStudentJWT ,viewAllGrievances)
+
+studentRouter.route("/viewsinglegreviance")
+.post(verifyStudentJWT ,viewSingleGreviances)
 
 // userRouter.route("/employee/signup")
 // .post(signup)

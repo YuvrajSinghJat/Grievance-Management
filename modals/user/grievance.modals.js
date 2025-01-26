@@ -4,56 +4,63 @@ const Schema= mongoose.Schema;
 //Define Grievance schema
 const grievanceSchema= Schema(
     {
-        /*grievanceid:{
-            type: Number,
-            required: true,
-            unique: true
-        },*/
-        grievanceType:{
+        studentId : {
+            type : mongoose.Types.ObjectId(),
+            ref : 'Student'
+        },
+        grievanceType : {
             type: String,
             required: true
         },
-        grievanceTitle:{
+        grievanceTitle : {
             type: String,
             required: true
         },
-        grievanceDesc:{
+        grievanceDescription : {
             type:String,
             required: true
         },
-        /*scholarno:{
-            type: Number,
-            required: true,
-            unique: true
-        },*/
-        proof:{
+        proof : {
             type: String
         },
-        actionByDosa:{
+
+        actionByDosa : {
             type: String,
-            default: null
         },
-        actionByVC:{
+        actionByVC : {
             type: String,
-            default: null
         },
-        actionByCommittee:{
+        committeeMembers : [
+            {
+                employeeId : {
+                    type: mongoose.Types.ObjectId(),
+                    ref : 'Employee'
+                },
+                name : {
+                    type: String,
+                },
+                post : {
+                    type: String,
+                }
+            }
+        ],
+         
+        actionByCommittee : {
             type: String,
-            default: null,
-            //reportGenerated: String
         },
-        actionOnReportByVC:{
-            type: String,
-            default: null
-        }/*,
-        actionByRegistrar:{
-            type: String,
-            default: null
-        }*/
+        vcSatisfactory : {
+            type : String,
+        },
+        meetingWithChairperson : {
+            type : String,
+        },
+        actionOnReportByVC : {
+            type : String,
+        }
         
     },
     {
-        timestamps: true 
+        timestamps: true
     }
 );
 
