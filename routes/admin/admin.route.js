@@ -3,7 +3,7 @@ const { adminSignin, adminLogout } = require("../../controllers/admin/auth.contr
 const { verifyAdminJWT } = require("../../middlewares/auth.middleware.js")
 const { createAdmin, createEmployee } = require("../../controllers/admin/create.controllers.js")
 const { viewAllAdmins, viewAllEmployees, viewAllStudents, viewAllGrievances } = require("../../controllers/admin/view.controllers.js")
-
+const { viewAllGrievancesByDOSA } = require("../../controllers/user/employee/grevianceHandlers.controllers.js")
 const adminRouter = express.Router()
 
 adminRouter.route("/signin")
@@ -29,5 +29,8 @@ adminRouter.route("/viewAllStudents")
 
 adminRouter.route("/viewAllGrievances")
 .post(verifyAdminJWT , viewAllGrievances)
+
+adminRouter.route("/viewAllGrievancesByDosa")
+.get(viewAllGrievancesByDOSA) 
 
 module.exports = { adminRouter }
