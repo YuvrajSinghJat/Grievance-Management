@@ -32,8 +32,8 @@ const verifyStudentJWT = asyncHandler ( async (req,res,next)=>{
 })
 
 const verifyEmployeeJWT = asyncHandler ( async (req,res,next)=>{
-    const accessToken = req.cookie.accessToken 
-    const refreshToken = req.cookie.refreshToken
+    const accessToken = req.cookies.accessToken 
+    const refreshToken = req.cookies.refreshToken
 
     if(!accessToken)
     {
@@ -55,8 +55,8 @@ const verifyEmployeeJWT = asyncHandler ( async (req,res,next)=>{
 })
 
 const verifyAdminJWT = asyncHandler ( async (req,res,next)=>{
-    const accessToken = req.cookie.accessToken 
-    const refreshToken = req.cookie.refreshToken
+    const accessToken = req.cookies.accessToken 
+    const refreshToken = req.cookies.refreshToken
 
     if(!accessToken)
     {
