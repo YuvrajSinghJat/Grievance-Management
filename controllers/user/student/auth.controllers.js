@@ -64,9 +64,9 @@ const signup = asyncHandler( async (req,res) =>{
     }
     
     const studentSignUp = await Student.create({
-        studentEnrollmentNo : enrollmentNo,
+        enrollmentNo : enrollmentNo,
         email : email,
-        studentName : name,
+        name : name,
         password : password
     })
 

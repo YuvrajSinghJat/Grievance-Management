@@ -5,16 +5,16 @@ const jwt = require("jsonwebtoken")
 // Define Studente Schema
 const studentSchema = Schema(
   {
-    studentEnrollmentNo: { 
+    enrollmentNo: { 
       type: String, 
       required: true, 
       unique: true 
     },
-    studentScholarNo: { 
+    scholarNo: { 
       type: Number, 
       
     },
-    studentName: { 
+    name: { 
       type: String, 
       required: true 
     },
@@ -30,7 +30,7 @@ const studentSchema = Schema(
       type: String, 
 
     },
-    studentMobileNo: { 
+    mobileNo: { 
       type: Number, 
     },
     email: { 
@@ -42,10 +42,10 @@ const studentSchema = Schema(
       type: String, 
       required: true 
     },
-    studentParentName: { 
+    parentName: { 
       type: String, 
     },
-    studentParentContactNo:{
+    parentContactNo:{
       type: Number,
     },
     refreshToken: { 
