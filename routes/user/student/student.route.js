@@ -11,7 +11,7 @@ studentRouter.route("/signin")
 .post(signin)
 
 studentRouter.route("/logout")
-.post(verifyStudentJWT , logout)
+.get(verifyStudentJWT , logout)
 
 studentRouter.route("/fileGreviances")
 .post(verifyStudentJWT ,fileGreviances)

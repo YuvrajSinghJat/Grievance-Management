@@ -5,10 +5,12 @@ const { ApiError } = require("../utility/ApiError.js")
 const { Admin } = require("../modals/admin/admin.modals.js")
 const { Student } = require("../modals/user/student.modal.js")
 const { Employee } = require("../modals/user/employee.modal.js")
+//const cookie = require("cookie-parser")
 
 const verifyStudentJWT = asyncHandler ( async (req,res,next)=>{
-    const accessToken = req.cookie.accessToken 
-    const refreshToken = req.cookie.refreshToken
+    console.log(req.cookies)
+    const accessToken = req.cookies.accessToken 
+    const refreshToken = req.cookies.refreshToken
 
     if(!accessToken)
     {

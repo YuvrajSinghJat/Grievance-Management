@@ -33,12 +33,12 @@ const studentSchema = Schema(
     studentMobileNo: { 
       type: Number, 
     },
-    studentEmail: { 
+    email: { 
       type: String, 
       required: true, 
       unique: true 
     },
-    studentPassword: { 
+    password: { 
       type: String, 
       required: true 
     },
@@ -57,22 +57,42 @@ const studentSchema = Schema(
   }
 );
 
+const options = {
+  httpOnly : true,
+  secure : true
+}
+
 studentSchema.methods.generateAccessToken = function (){
-    jwt.sign({
+    accessToken = jwt.sign(
+      {
         _id : this._id
       },
       process.env.ACCESS_TOKEN_SECRETKEY,
-      process.env.ACCESS_TOKEN_EXPIRY
+      {
+        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
+      },
+      {
+        httpOnly : true,
+        secure : true
+      }
   )
+  return accessToken
 }
 
 studentSchema.methods.generateRefreshToken = function (){
-    jwt.sign({
+    refreshToken = jwt.sign({
       _id : this._id
     },
     process.env.REFRESH_TOKEN_SECRETKEY,
-    process.env.REFRESH_TOKEN_EXPIRY
+    {
+      expiresIn : process.env.REFRESH_TOKEN_EXPIRY
+    },
+    {
+      httpOnly : true,
+      secure : true
+    }
     )
+    return refreshToken
 }
 
 // Define Student Model
