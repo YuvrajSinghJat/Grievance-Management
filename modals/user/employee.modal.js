@@ -52,7 +52,7 @@ const options = {
   secure : true
 }
 
-studentSchema.methods.generateAccessToken = function (){
+employeeSchema.methods.generateAccessToken = function (){
     accessToken = jwt.sign(
       {
         _id : this._id
