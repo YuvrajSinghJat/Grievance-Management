@@ -54,6 +54,24 @@ const viewAllGrievances = asyncHandler(async(req,res,next)=>{
         .json(new ApiResponse(404, grievances, "Grievances retrieved successfully"));
 })
 
+const viewSingleGreviances = asyncHandler(async(req,res,next)=>{
+    const grievanceId = req.body.grievanceId;
+
+    const findSingleGrievance = await Grievance.find({
+        _id : grievanceId,
+    })
+
+    if(!findSingleGrievance){
+        throw new ApiError(404,"No Grievances found!")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, findSingleGrievance, "Grievance retrieved successfully!")
+    )
+
+})
 
 
 
@@ -62,4 +80,5 @@ module.exports = {
     viewAllEmployees,
     viewAllStudents,
     viewAllGrievances,
+    viewSingleGreviances
 }

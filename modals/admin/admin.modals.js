@@ -39,7 +39,46 @@ const adminSchema = new Schema(
       required: true 
     }
   }
+    
 );
+
+const options = {
+  httpOnly : true,
+  secure : true
+}
+
+studentSchema.methods.generateAccessToken = function (){
+    accessToken = jwt.sign(
+      {
+        _id : this._id
+      },
+      process.env.ACCESS_TOKEN_SECRETKEY,
+      {
+        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
+      },
+      {
+        httpOnly : true,
+        secure : true
+      }
+  )
+  return accessToken
+}
+
+adminSchema.methods.generateRefreshToken = function (){
+    refreshToken = jwt.sign({
+      _id : this._id
+    },
+    process.env.REFRESH_TOKEN_SECRETKEY,
+    {
+      expiresIn : process.env.REFRESH_TOKEN_EXPIRY
+    },
+    {
+      httpOnly : true,
+      secure : true
+    }
+    )
+    return refreshToken
+}
 
 // Define Employee Model
 const Admin = mongoose.model('Admin', adminSchema);

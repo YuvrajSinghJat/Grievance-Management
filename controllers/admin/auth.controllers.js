@@ -1,9 +1,25 @@
 const { asyncHandler } = require("../../utility/asyncHandler.js");
-const { Admin } = require("../../modals/admin/admin.modals.js")
+const { Admin } = require("../../modals/admin/admin.modals.js");
+const { ApiError } = require("../../utility/ApiError.js");
 
 const options = {
     httpOnly : true,
     secure : true
+}
+
+const createAccessAndRefeshToken = async function(_id){
+    let user = await Admin.findById(_id);
+    //console.log(user)
+    // let accessToken =  "one"
+    // let refreshToken = "two"
+    let accessToken = await user.generateAccessToken();
+    let refreshToken = await user.generateRefreshToken();
+
+    user.refreshToken = refreshToken ;
+    await user.save({validateBeforeSave : false});
+    console.log(refreshToken)
+    console.log(accessToken)
+    return { accessToken,refreshToken }
 }
 
 const adminSignin = asyncHandler(async ( req,res )=>{

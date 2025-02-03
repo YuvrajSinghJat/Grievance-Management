@@ -9,6 +9,20 @@ const options = {
     secure : true
 }
 
+const createAccessAndRefeshToken = async function(_id){
+    let user = await Employee.findById(_id);
+    //console.log(user)
+    // let accessToken =  "one"
+    // let refreshToken = "two"
+    let accessToken = await user.generateAccessToken();
+    let refreshToken = await user.generateRefreshToken();
+
+    user.refreshToken = refreshToken ;
+    await user.save({validateBeforeSave : false});
+    console.log(refreshToken)
+    console.log(accessToken)
+    return { accessToken,refreshToken }
+}
 
 // const employeeSignup = asyncHandler( async (req,res) =>{
 //     let enrollmentNo = req.body.enrollmentNo;

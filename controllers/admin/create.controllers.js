@@ -9,12 +9,15 @@ const options = {
     httpOnly : true,
     secure : true
 }
+
 //createAdmin controller
 const createAdmin = asyncHandler(async (req,res,next) =>{
     const {
         adminId,
         adminName,
         adminDesignation,
+        adminDepartment,
+        adminFaculty,
         adminMobileNo,
         adminEmail,
         adminPassword
