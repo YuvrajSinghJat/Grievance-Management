@@ -1,6 +1,7 @@
 const { asyncHandler } = require("../../utility/asyncHandler.js");
 const { Admin } = require("../../modals/admin/admin.modals.js");
 const { ApiError } = require("../../utility/ApiError.js");
+const { ApiResponse } = require("../../utility/ApiResponse.js");
 
 const options = {
     httpOnly : true,
@@ -34,7 +35,7 @@ const adminSignin = asyncHandler(async ( req,res )=>{
         throw new ApiError(404,"Admin not found!")
     }
 
-    const {accessToken,refreshToken} = await createAccessAndRefreshToken(adminToLogin._id)
+    const {accessToken,refreshToken} = await createAccessAndRefeshToken(adminToLogin._id)
 
     const findLoggedAdmin = await Admin.findById(adminToLogin._id).select("-password -refreshToken")
     if(!findLoggedAdmin){

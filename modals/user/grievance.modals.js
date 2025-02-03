@@ -20,6 +20,12 @@ const grievanceSchema = Schema(
 			type: String,
 			required: true,
 		},
+		 status : {
+			type : String,
+			default : "Pending"
+	
+		 },
+		 
 		proof: {
 			type: String,
 		},

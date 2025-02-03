@@ -36,7 +36,7 @@ const createAdmin = asyncHandler(async (req,res,next) =>{
         adminMobileNo,
         adminEmail,
         adminPassword
-    });
+    })
     await newAdmin.save();
 
     const response=new ApiResponse(201, newAdmin,"Admin created successfully!");
@@ -48,15 +48,15 @@ const createEmployee= asyncHandler(async(req, res, next)=>{
     const {
         empId,
         empName,
-        empDesignation,
-        empDepartment,
-        empFaculty,
-        empMobileNo,
-        empEmail,
-        empPassword
+        Designation,
+        Department,
+        Faculty,
+        MobileNo,
+        Email,
+        Password
     }=req.body;
 
-    const existingEmp= await Employee.findOne({$or:[{empEmail},{empId}]});
+    const existingEmp= await Employee.findOne({$or:[{Email},{empId}]});
     if(existingEmp){
         return next(new ApiError(400,"Employee already exists!"));
     }
@@ -64,12 +64,12 @@ const createEmployee= asyncHandler(async(req, res, next)=>{
     const newEmp= new Employee({
         empId,
         empName,
-        empDesignation,
-        empDepartment,
-        empFaculty,
-        empMobileNo,
-        empEmail,
-        empPassword
+        Designation,
+        Department,
+        Faculty,
+        MobileNo,
+        Email,
+        Password
     })
     await newEmp.save();
 

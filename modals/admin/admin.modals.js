@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const jwt = require('jsonwebtoken');
 
 // Define admin Schema
 const adminSchema = new Schema(
@@ -50,7 +51,7 @@ const options = {
 adminSchema.methods.generateAccessToken = function (){
     accessToken = jwt.sign(
       {
-        _id : this._id
+        _id : this.adminIdid
       },
       process.env.ACCESS_TOKEN_SECRETKEY,
       {
@@ -66,7 +67,7 @@ adminSchema.methods.generateAccessToken = function (){
 
 adminSchema.methods.generateRefreshToken = function (){
     refreshToken = jwt.sign({
-      _id : this._id
+      _id : this.adminIdid
     },
     process.env.REFRESH_TOKEN_SECRETKEY,
     {
