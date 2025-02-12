@@ -38,6 +38,9 @@ const adminSchema = new Schema(
     adminPassword:{
       type: String, 
       required: true 
+    },
+    refreshToken :{
+      type: String 
     }
   }
     

@@ -1,6 +1,27 @@
 const mongoose = require("mongoose");
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
-const Grievance = require("../../../modals/user/grievance.modals.js")
+const Grievance = require("../../../modals/user/grievance.modals.js");
+const { ApiResponse } = require("../../../utility/ApiResponse.js");
+
+// View single grievances - DOSAs
+const viewSingleGrievance = asyncHandler(async (req, res, next) => {
+	const grievanceId = req.body.grievanceId;
+	const grievances = await Grievance.find({
+		_id : grievanceId
+	})
+
+    if(!grievances){
+        throw new ApiError(404,"Grievances not found!")
+    }
+
+	res
+	.status(200)
+	.json(
+		new ApiResponse(200,grievances,"Grievances send properly")
+	);
+});
+
+
 
 // View all grievances - DOSAs
 const viewAllGrievancesByDOSA = asyncHandler(async (req, res, next) => {
@@ -89,6 +110,7 @@ const actionByChairman = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
+	viewSingleGrievance,
 	viewAllGrievancesByDOSA,
 	viewAllGrievancesByVC,
 	viewAllGrievancesByEmployee,

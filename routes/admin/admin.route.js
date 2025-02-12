@@ -7,7 +7,7 @@ const { viewAllAdmins, viewAllEmployees, viewAllStudents, viewAllGrievances, vie
 const adminRouter = express.Router()
 
 adminRouter.route("/signin")
-.post(adminSignin)
+.post(verifyAdminJWT ,adminSignin)
 
 adminRouter.route("/logout")
 .post(verifyAdminJWT , adminLogout)

@@ -38,8 +38,8 @@ const employeeSchema = Schema(
       type: String, 
       required: true 
     },
-    refreshToken: { 
-      type: String
+    refreshToken : {
+      type: String 
     }
   },
   {
