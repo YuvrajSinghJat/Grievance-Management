@@ -40,7 +40,7 @@ app.use("/student", studentRouter);
 app.use("/employee", employeeRouter);
 app.use("/admin", adminRouter);
 
-// app.get("/home",(req,res)=>{
-//     res.send("Hello Home !!")
-//     console.log(process.env.MONGO_URL)
-// })
+app.get("/home",(req,res)=>{
+    res.send("Hello Home !!")
+    console.log(process.env.MONGO_URL)
+})
