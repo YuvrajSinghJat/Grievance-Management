@@ -31,11 +31,12 @@ const adminSignin = asyncHandler(async ( req,res )=>{
         email: email,
         password: password
     }).select("-password")
+
     if(!adminToLogin){
         throw new ApiError(404,"Admin not found!")
     }
 
-    const {accessToken,refreshToken} = await createAccessAndRefeshToken(adminToLogin._id)
+    const {accessToken,refreshToken} = await createAccessAndRefeshToken(adminToLogin.id)
 
     const findLoggedAdmin = await Admin.findById(adminToLogin._id).select("-password -refreshToken")
     if(!findLoggedAdmin){
@@ -65,8 +66,8 @@ const adminLogout = asyncHandler( async(req,res)=>{
     )
     return res
     .status(200)
-    .clearCookie(accessToken,options)
-    .clearCookie(refreshToken,options)
+    .clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options)
     .send(200,{},"User logout properly")
 })
 

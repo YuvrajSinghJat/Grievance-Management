@@ -23,7 +23,6 @@ const grievanceSchema = Schema(
 		 status : {
 			type : String,
 			default : "Pending"
-	
 		 },
 		 
 		proof: {
