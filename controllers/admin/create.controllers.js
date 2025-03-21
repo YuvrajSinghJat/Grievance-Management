@@ -22,22 +22,24 @@ const createAdmin = asyncHandler(async (req,res,next) =>{
         adminEmail,
         adminPassword
     } = req.body;
+    console.log(req.body)
+    const existingAdmin= await Admin.findOne({adminEmail});
 
-    const existingAdmin= await Admin.findOne({$or:[{adminEmail},{adminId}]});
     if(existingAdmin){
-        return next(new ApiError(400,"Admin already exists!"));
+        throw new ApiError(400,"Admin already exists!");
     }
-    const newAdmin= new Admin({
-        adminId,
-        adminName,
-        adminDesignation,
-        adminDepartment,
-        adminFaculty,
-        adminMobileNo,
-        adminEmail,
-        adminPassword
+    console.log(existingAdmin)
+    const newAdmin= await Admin.create({
+        adminId : adminId,
+        adminName: adminName,
+        adminDesignation : adminDesignation,
+        adminDepartment: adminDepartment,
+        adminFaculty: adminFaculty,
+        adminMobileNo : adminMobileNo,
+        adminEmail: adminEmail,
+        adminPassword : adminPassword
     })
-    await newAdmin.save();
+    console.log(newAdmin)
 
     const response=new ApiResponse(201, newAdmin,"Admin created successfully!");
     return res.status(201).json(response);

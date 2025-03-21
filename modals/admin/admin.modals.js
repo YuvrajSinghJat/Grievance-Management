@@ -54,7 +54,7 @@ const options = {
 adminSchema.methods.generateAccessToken = function (){
     accessToken = jwt.sign(
       {
-        _id : this.adminIdid
+        _id : this._id
       },
       process.env.ACCESS_TOKEN_SECRETKEY,
       {
@@ -70,7 +70,7 @@ adminSchema.methods.generateAccessToken = function (){
 
 adminSchema.methods.generateRefreshToken = function (){
     refreshToken = jwt.sign({
-      _id : this.adminIdid
+      _id : this._id
     },
     process.env.REFRESH_TOKEN_SECRETKEY,
     {
