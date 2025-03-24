@@ -7,13 +7,13 @@ const studentRouter = express.Router()
 studentRouter.route("/signup")
 .post(signup)
 
-studentRouter.route("/signin")
+studentRouter.route("/signin") //working fine
 .post(signin)
 
-studentRouter.route("/logout")
+studentRouter.route("/logout") //working fine
 .get(verifyStudentJWT , logout)
 
-studentRouter.route("/fileGreviances")
+studentRouter.route("/fileGreviances") //working fine
 .post(verifyStudentJWT ,fileGreviances)
 
 studentRouter.route("/viewallgreviances")

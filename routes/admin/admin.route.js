@@ -6,31 +6,31 @@ const { viewAllAdmins, viewAllEmployees, viewAllStudents, viewAllGrievances, vie
 
 const adminRouter = express.Router()
 
-adminRouter.route("/signin")
+adminRouter.route("/signin")//working fine
 .post(adminSignin)
 
-adminRouter.route("/logout")
+adminRouter.route("/logout")//working fine
 .post(verifyAdminJWT , adminLogout)
 
-adminRouter.route("/createAdmin")
+adminRouter.route("/createAdmin")//working fine
 .post(verifyAdminJWT , createAdmin)
 
-adminRouter.route("/viewAllAdmins")
+adminRouter.route("/viewAllAdmins")//working fine
 .post(verifyAdminJWT , viewAllAdmins)
 
-adminRouter.route("/createEmployee")
+adminRouter.route("/createEmployee") //working fine
 .post(verifyAdminJWT , createEmployee)
 
-adminRouter.route("/viewAllEmployees")
+adminRouter.route("/viewAllEmployees") //working fine
 .post(verifyAdminJWT , viewAllEmployees)
 
-adminRouter.route("/viewAllStudents")
+adminRouter.route("/viewAllStudents") //working fine
 .post(verifyAdminJWT , viewAllStudents)
 
-adminRouter.route("/viewAllGrievances")
+adminRouter.route("/viewAllGrievances") //working fine
 .post(verifyAdminJWT , viewAllGrievances)
 
-adminRouter.route("/viewSingleGrievances")
+adminRouter.route("/viewSingleGrievances") //working fine has send the ._id of grivence as grivenceId to check one 
 .post(verifyAdminJWT , viewSingleGreviances)
 
 

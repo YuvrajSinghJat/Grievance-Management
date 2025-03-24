@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
-const Grievance = require("../../../modals/user/grievance.modals.js");
+const { Grievance } = require("../../../modals/user/grievance.modals.js");
 const { ApiResponse } = require("../../../utility/ApiResponse.js");
 
 // View single grievances - DOSAs
@@ -23,11 +23,15 @@ const viewSingleGrievance = asyncHandler(async (req, res, next) => {
 
 
 
+/* This code snippet defines a function `viewAllGrievancesByDOSA` that retrieves all grievances that
+have a status of either "Pending" or "Reviewed by DOSA" from the database. It then populates the
+"student" field with the properties "name" and "email". Finally, it sends a JSON response with a
+success status and the retrieved grievances. */
 // View all grievances - DOSAs
 const viewAllGrievancesByDOSA = asyncHandler(async (req, res, next) => {
 	const grievances = await Grievance.find({
 		status: { $in: ["Pending", "Reviewed by DOSA"] },
-	}).populate("student", "name email");
+	})
 	res.status(200).json({ success: true, grievances });
 });
 
@@ -47,6 +51,8 @@ const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
 	);
 	res.status(200).json({ success: true, grievances });
 });
+
+
 
 // Take action - DOSA
 const actionByDOSA = asyncHandler(async (req, res, next) => {
@@ -68,6 +74,8 @@ const actionByDOSA = asyncHandler(async (req, res, next) => {
 		.json({ success: true, message: "Action taken by DOSA", grievance });
 });
 
+
+
 // Take action - VC
 const actionByVC = asyncHandler(async (req, res, next) => {
 	const { grievanceId, action, remarks } = req.body;
@@ -86,6 +94,8 @@ const actionByVC = asyncHandler(async (req, res, next) => {
 		.status(200)
 		.json({ success: true, message: "Action taken by VC", grievance });
 });
+
+
 
 // Take action - Chairman
 const actionByChairman = asyncHandler(async (req, res, next) => {

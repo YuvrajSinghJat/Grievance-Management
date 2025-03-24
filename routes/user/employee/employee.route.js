@@ -1,13 +1,13 @@
 const express = require("express");
 const { employeeSignin, employeeLogout } = require("../../../controllers/user/employee/auth.controllers");
 const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
-const { viewAllGrievancesByDOSA, viewSingleGrievance } = require("../../../controllers/user/employee/grevianceHandlers.controllers");
+const { viewAllGrievancesByDOSA, viewSingleGrievance, viewAllGrievancesByVC, actionByDOSA } = require("../../../controllers/user/employee/grevianceHandlers.controllers");
 
 
 const employeeRouter = express.Router();
 
 employeeRouter.route("/signin")
-.post(verifyEmployeeJWT ,employeeSignin)
+.post(employeeSignin)
 
 employeeRouter.route("/logout")
 .post(verifyEmployeeJWT , employeeLogout)
@@ -17,6 +17,11 @@ employeeRouter.route("/viewSingleGrievances")
 
 employeeRouter.route("/viewAllGrievancesByDOSA")
 .post(verifyEmployeeJWT , viewAllGrievancesByDOSA)
+employeeRouter.route("actionByDOSA")
+.post(verifyEmployeeJWT , actionByDOSA)
+
+employeeRouter.route("/viewAllGrievancesByVC")
+.post(verifyEmployeeJWT , viewAllGrievancesByVC)
 
 
 module.exports = { employeeRouter }

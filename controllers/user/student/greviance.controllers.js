@@ -12,7 +12,7 @@ const fileGreviances = asyncHandler( async(req,res,next) =>{
     const grievanceType = req.body.grievanceType;
     const title = req.body.title;
     const description = req.body.description;
-
+    
     if(!grievanceType)
     {
         throw new ApiError(404,"Grievance Type not found")

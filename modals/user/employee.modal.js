@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const jwt = require('jsonwebtoken');
 
 // Define Employee Schema
 const employeeSchema = Schema(

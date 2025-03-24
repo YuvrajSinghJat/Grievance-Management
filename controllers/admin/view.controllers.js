@@ -51,7 +51,7 @@ const viewAllGrievances = asyncHandler(async(req,res,next)=>{
         }
         res
         .status(200)
-        .json(new ApiResponse(404, grievances, "Grievances retrieved successfully"));
+        .json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
 })
 
 const viewSingleGreviances = asyncHandler(async(req,res,next)=>{

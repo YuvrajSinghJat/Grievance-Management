@@ -90,15 +90,19 @@ const employeeSignin = asyncHandler( async (req,res) =>{
     let email = req.body.email;
     let password=req.body.password;
 
-    const findEmployeeToLogin = await Employee.findOne({
+    const findEmployee = await Employee.findOne({
         email:email,
         password: password
     }).select("-password")
-    if(!findEmployeeToLogin){
+    if(!findEmployee){
         throw new ApiError(404,"Employee not found!")
     }
-    const {accessToken, refreshToken} = await createAccessandRefreshToken(findEmployeeToLogin._id)
-    const findLoggedEmployee= await Employee.findById(findEmployeeToLogin._id).select("-password -refreshToken")
+
+    //GENRATING TOKENS
+    const accessToken = await findEmployee.generateAccessToken(findEmployee._id)
+    const refreshToken = await findEmployee.generateRefreshToken(findEmployee._id)
+
+    const findLoggedEmployee= await Employee.findById(findEmployee._id).select("-password -refreshToken")
 
     if(!findLoggedEmployee){
         throw new ApiError(404,"Employee not forund after generation of token")
