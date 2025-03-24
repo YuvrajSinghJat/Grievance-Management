@@ -59,7 +59,7 @@ const studentSchema = Schema(
 
 const options = {
   httpOnly : true,
-  secure : true
+  secure : false
 }
 
 studentSchema.methods.generateAccessToken = function (){
