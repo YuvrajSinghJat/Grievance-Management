@@ -7,7 +7,7 @@ const { ApiError } = require("../../../utility/ApiError.js");
 const jwt = require("jsonwebtoken");
 const options = {
     httpOnly : true,
-    secure : false
+    secure : true
 }
 
 

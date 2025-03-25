@@ -28,7 +28,9 @@ const grievanceSchema = Schema(
 		proof: {
 			type: String,
 		},
-
+		remarks: {
+			type: String,
+		},
 		actionByDosa: {
 			type: String,
 		},

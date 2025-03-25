@@ -35,28 +35,10 @@ const viewAllGrievancesByDOSA = asyncHandler(async (req, res, next) => {
 	res.status(200).json({ success: true, grievances });
 });
 
-// View all grievances - VC
-const viewAllGrievancesByVC = asyncHandler(async (req, res, next) => {
-	const grievances = await Grievance.find({
-		status: { $in: ["Reviewed by DOSA", "Reviewed by VC"] },
-	}).populate("student", "name email");
-	res.status(200).json({ success: true, grievances });
-});
-
-// View all grievances - Employee
-const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
-	const grievances = await Grievance.find({ status: "Pending" }).populate(
-		"student",
-		"name email"
-	);
-	res.status(200).json({ success: true, grievances });
-});
-
-
-
 // Take action - DOSA
 const actionByDOSA = asyncHandler(async (req, res, next) => {
 	const { grievanceId, action, remarks } = req.body;
+
 
 	const grievance = await Grievance.findById(grievanceId);
 	if (!grievance)
@@ -65,7 +47,7 @@ const actionByDOSA = asyncHandler(async (req, res, next) => {
 			.json({ success: false, message: "Grievance not found" });
 
 	grievance.status =
-		action === "approve" ? "Reviewed by DOSA" : "Rejected by DOSA";
+		action === "approveByDOSA" ? "Reviewed by DOSA" : "Rejected by DOSA";
 	grievance.remarks = remarks;
 	await grievance.save();
 
@@ -74,7 +56,13 @@ const actionByDOSA = asyncHandler(async (req, res, next) => {
 		.json({ success: true, message: "Action taken by DOSA", grievance });
 });
 
-
+// View all grievances - VC
+const viewAllGrievancesByVC = asyncHandler(async (req, res, next) => {
+	const grievances = await Grievance.find({
+		status: { $in: ["Reviewed by DOSA", "Reviewed by VC"] },
+	});
+	res.status(200).json({ success: true, grievances });
+});
 
 // Take action - VC
 const actionByVC = asyncHandler(async (req, res, next) => {
@@ -86,7 +74,7 @@ const actionByVC = asyncHandler(async (req, res, next) => {
 			.status(404)
 			.json({ success: false, message: "Grievance not found" });
 
-	grievance.status = action === "approve" ? "Reviewed by VC" : "Rejected by VC";
+	grievance.status = action === "approveByVC" ? "Reviewed by VC" : "Rejected by VC";
 	grievance.remarks = remarks;
 	await grievance.save();
 
@@ -95,6 +83,12 @@ const actionByVC = asyncHandler(async (req, res, next) => {
 		.json({ success: true, message: "Action taken by VC", grievance });
 });
 
+
+// View all grievances - Employee
+const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
+	const grievances = await Grievance.find({ status: "Pending" });
+	res.status(200).json({ success: true, grievances });
+});
 
 
 // Take action - Chairman
