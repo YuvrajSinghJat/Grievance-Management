@@ -30,8 +30,8 @@ adminRouter.route("/viewAllStudents") //working fine
 adminRouter.route("/viewAllGrievances") //working fine
 .post(verifyAdminJWT , viewAllGrievances)
 
-adminRouter.route("/viewSingleGrievances") //working fine has send the ._id of grivence as grivenceId to check one 
+adminRouter.route("/viewSingleGrievances") //working fine 
 .post(verifyAdminJWT , viewSingleGreviances)
 
 
-module.exports = { adminRouter }
+module.exports =  adminRouter ;

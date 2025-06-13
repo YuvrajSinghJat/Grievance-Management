@@ -11,6 +11,7 @@ const options = {
 }
 
 
+
 const createAccessAndRefeshToken = async function(_id){
         let user = await Student.findById(_id);
         //console.log(user)
@@ -118,7 +119,7 @@ const signin = asyncHandler( async (req,res) =>{
     .cookie("accessToken",accessToken,options)
     .cookie("refreshToken",refreshToken,options)
     .json(
-        new ApiResponse(200,findLoggedUser,"User fetch successfully wiyh login")
+        new ApiResponse(200,findLoggedUser,"User fetch successfully with login")
     )
 })
 

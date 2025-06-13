@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-// Define Studente Schema
-const studentSchema = Schema(
+const Schema = mongoose.Schema;
+
+// Define Student Schema
+const studentSchema = new Schema(
   {
     enrollmentNo: { 
       type: String, 
@@ -11,27 +12,23 @@ const studentSchema = Schema(
       unique: true 
     },
     scholarNo: { 
-      type: Number, 
-      
+      type: Number 
     },
     name: { 
       type: String, 
       required: true 
     },
-    studentProgram:{
-      type: String,
-
+    studentProgram: { 
+      type: String 
     },
     studentDepartment: { 
-      type: String, 
-
+      type: String 
     },
     studentFaculty: { 
-      type: String, 
-
+      type: String 
     },
     mobileNo: { 
-      type: Number, 
+      type: Number 
     },
     email: { 
       type: String, 
@@ -43,59 +40,38 @@ const studentSchema = Schema(
       required: true 
     },
     parentName: { 
-      type: String, 
+      type: String 
     },
-    parentContactNo:{
-      type: Number,
+    parentContactNo: { 
+      type: Number 
     },
     refreshToken: { 
-      type: String
+      type: String 
     }
   },
   {
-    timestamps: true 
+    timestamps: true
   }
 );
 
-const options = {
-  httpOnly : true,
-  secure : false
-}
+//  Generate Access Token
+studentSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    { _id: this._id },
+    process.env.ACCESS_TOKEN_SECRETKEY,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+  );
+};
 
-studentSchema.methods.generateAccessToken = function (){
-    accessToken = jwt.sign(
-      {
-        _id : this._id
-      },
-      process.env.ACCESS_TOKEN_SECRETKEY,
-      {
-        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
-      },
-      {
-        httpOnly : true,
-        secure : true
-      }
-  )
-  return accessToken
-}
-
-studentSchema.methods.generateRefreshToken = function (){
-    refreshToken = jwt.sign({
-      _id : this._id
-    },
+// Generate Refresh Token
+studentSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    { _id: this._id },
     process.env.REFRESH_TOKEN_SECRETKEY,
-    {
-      expiresIn : process.env.REFRESH_TOKEN_EXPIRY
-    },
-    {
-      httpOnly : true,
-      secure : true
-    }
-    )
-    return refreshToken
-}
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+  );
+};
 
-// Define Student Model
+// Export Student Model
 const Student = mongoose.model('Student', studentSchema);
-
-module.exports = { Student }
+module.exports = { Student };

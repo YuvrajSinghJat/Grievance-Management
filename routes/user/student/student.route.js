@@ -1,34 +1,62 @@
-const express = require("express")
-const { signup, signin, logout } = require("../../../controllers/user/student/auth.controllers.js")
-const { verifyStudentJWT } = require("../../../middlewares/auth.middleware.js")
-const { fileGreviances, viewAllGrievances, viewSingleGreviances } = require("../../../controllers/user/student/greviance.controllers.js")
-const studentRouter = express.Router()
+const express = require("express");
+const studentRouter = express.Router();
+const upload = require("../../../middlewares/multer.middleware");
 
-studentRouter.route("/signup")
-.post(signup)
+// Controllers
+const {
+  signup,
+  signin,
+  logout,
+} = require("../../../controllers/user/student/auth.controllers.js");
 
-studentRouter.route("/signin") //working fine
-.post(signin)
+const {
+  fileGreviances,
+  viewAllGrievances,
+  viewSingleGreviances,
+} = require("../../../controllers/user/student/greviance.controllers.js");
 
-studentRouter.route("/logout") //working fine
-.get(verifyStudentJWT , logout)
+// Middleware
+const { verifyStudentJWT } = require("../../../middlewares/auth.middleware.js");
+studentRouter.post("/fileGreviances", verifyStudentJWT, upload.single("proof"), fileGreviances);
+// -------------------- Auth Routes --------------------
 
-studentRouter.route("/fileGreviances") //working fine
-.post(verifyStudentJWT ,fileGreviances)
+/**
+ * @route   POST /student/signup
+ * @desc    Register a new student
+ */
+studentRouter.post("/signup", signup);
 
-studentRouter.route("/viewallgreviances")
-.post(verifyStudentJWT ,viewAllGrievances)
+/**
+ * @route   POST /student/signin
+ * @desc    Student login
+ */
+studentRouter.post("/signin", signin);
 
-studentRouter.route("/viewsinglegreviance")
-.post(verifyStudentJWT ,viewSingleGreviances)
+/**
+ * @route   GET /student/logout
+ * @desc    Logout student (requires authentication)
+ */
+studentRouter.get("/logout", verifyStudentJWT, logout);
 
-// userRouter.route("/employee/signup")
-// .post(signup)
+//Grievance Routes 
 
-// userRouter.route("/employee/signin")
-// .post(signin)
+/**
+ * @route   POST /student/fileGreviances
+ * @desc    Student files a grievance (requires authentication)
+ */
+studentRouter.post("/fileGreviances", verifyStudentJWT, fileGreviances);
 
-// userRouter.route("/employee/logout")
-// .post(verifyJWT ,logout)
+/**
+ * @route   POST /student/viewallgreviances
+ * @desc    Student views all grievances (requires authentication)
+ */
+studentRouter.post("/viewallgreviances", verifyStudentJWT, viewAllGrievances);
 
-module.exports = { studentRouter }
+/**
+ * @route   POST /student/viewsinglegreviance
+ * @desc    Student views a single grievance (requires authentication)
+ */
+studentRouter.post("/viewsinglegreviance", verifyStudentJWT, viewSingleGreviances);
+
+//Export Router
+module.exports = studentRouter;

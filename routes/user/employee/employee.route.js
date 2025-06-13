@@ -3,10 +3,9 @@ const { employeeSignin, employeeLogout } = require("../../../controllers/user/em
 const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
 const { viewAllGrievancesByDOSA, viewSingleGrievance, viewAllGrievancesByVC, actionByDOSA, actionByVC } = require("../../../controllers/user/employee/grevianceHandlers.controllers");
 
-
 const employeeRouter = express.Router();
 
-//everey Route is wroeking 
+//everey Route is working 
 employeeRouter.route("/signin")
 .post(employeeSignin)
 
@@ -29,4 +28,4 @@ employeeRouter.route("/actionByVC")
 .post(verifyEmployeeJWT ,actionByVC)
 
 
-module.exports = { employeeRouter }
+module.exports =  employeeRouter ;
