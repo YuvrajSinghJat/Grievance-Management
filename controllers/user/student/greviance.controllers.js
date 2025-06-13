@@ -3,7 +3,10 @@ const { ApiError } = require("../../../utility/ApiError.js");
 const { ApiResponse } = require("../../../utility/ApiResponse.js");
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
 
-//File a Grievance
+// ----------------------------
+// @desc    File a Grievance
+// @route   POST /student/fileGreviances
+// ----------------------------
 const fileGreviances = asyncHandler(async (req, res, next) => {
   const {
     scholarNo,
@@ -12,16 +15,24 @@ const fileGreviances = asyncHandler(async (req, res, next) => {
     department,
     grievanceType,
     title,
-    description
+    description,
   } = req.body;
 
-  if (!scholarNo || !email || !mobile || !department || !grievanceType || !title || !description) {
+  if (
+    !scholarNo ||
+    !email ||
+    !mobile ||
+    !department ||
+    !grievanceType ||
+    !title ||
+    !description
+  ) {
     throw new ApiError(400, "All fields are required");
   }
 
   const studentId = req.verificationOfUser?._id;
   if (!studentId) {
-    throw new ApiError(401, "Unauthorized request");
+    throw new ApiError(401, "Unauthorized request. Student ID missing.");
   }
 
   const grievanceData = {
@@ -48,15 +59,20 @@ const fileGreviances = asyncHandler(async (req, res, next) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, grievance, " Grievance successfully filed"));
+    .json(new ApiResponse(201, grievance, "Grievance successfully filed"));
 });
 
-//View All Grievances
+// ----------------------------
+// @desc    View All Grievances of logged-in student
+// @route   POST /student/viewallgreviances
+// ----------------------------
 const viewAllGrievances = asyncHandler(async (req, res, next) => {
   const studentId = req.verificationOfUser?._id;
 
+  console.log("🔍 Viewing grievances for student ID:", studentId);
+
   if (!studentId) {
-    throw new ApiError(401, "Unauthorized request");
+    throw new ApiError(401, "Unauthorized request. Student ID missing.");
   }
 
   const grievances = await Grievance.find({ studentId }).select(
@@ -64,7 +80,7 @@ const viewAllGrievances = asyncHandler(async (req, res, next) => {
   );
 
   if (!grievances || grievances.length === 0) {
-    throw new ApiError(404, "No grievances found");
+    throw new ApiError(404, "No grievances found.");
   }
 
   return res
@@ -72,7 +88,10 @@ const viewAllGrievances = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
 });
 
-//View Single Grievance
+// ----------------------------
+// @desc    View Single Grievance by ID
+// @route   POST /student/viewsinglegreviance
+// ----------------------------
 const viewSingleGreviances = asyncHandler(async (req, res, next) => {
   const studentId = req.verificationOfUser?._id;
   const { grievanceId } = req.body;
@@ -97,6 +116,6 @@ const viewSingleGreviances = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   fileGreviances,
-  viewSingleGreviances,
   viewAllGrievances,
+  viewSingleGreviances,
 };
