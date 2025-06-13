@@ -39,9 +39,10 @@ const createAdmin = asyncHandler(async (req,res,next) =>{
         adminEmail: adminEmail,
         adminPassword : adminPassword
     })
+    
     console.log(newAdmin)
 
-    const response=new ApiResponse(201, newAdmin,"Admin created successfully!");
+    const response = new ApiResponse(201, newAdmin,"Admin created successfully!");
     return res.status(201).json(response);
 })
 
@@ -60,7 +61,7 @@ const createEmployee= asyncHandler(async(req, res, next)=>{
 
     const existingEmp= await Employee.findOne({$or:[{Email},{empId}]});
     if(existingEmp){
-        return next(new ApiError(400,"Employee already exists!"));
+        throw new ApiError(400,"Employee already exists!");
     }
 
     const newEmp= new Employee({
@@ -75,7 +76,7 @@ const createEmployee= asyncHandler(async(req, res, next)=>{
     })
     await newEmp.save();
 
-    const response=new ApiResponse(201, newEmp, "Employee created successfully");
+    const response = new ApiResponse(201, newEmp, "Employee created successfully");
     return res.status(201).json(response);
 })
 
