@@ -6,46 +6,47 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const mongoose = require("mongoose");
 
-//  Serve uploaded files correctly
+// Serve uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-//Custom Modules 
+// Custom Modules
 const { dbConnect } = require("./databaseConfig/connect.database.js");
 
-// Import routers
+// Import Routers
 const studentRouter = require("./routes/user/student/student.route.js");
 const employeeRouter = require("./routes/user/employee/employee.route.js");
 const adminRouter = require("./routes/admin/admin.route.js");
+const authRouter = require("./routes/auth.routes.js"); //  NEW: universal login route
 
-//  Middleware Setup
+// Middleware Setup
 app.use(cors({
-  origin: "http://localhost:5173", // Replace with your React frontend origin
+  origin: "http://localhost:5173", // React frontend origin
   credentials: true,
 }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//Database Connection
+// Database Connection
 const port = process.env.PORT || 8080;
 
 dbConnect()
-  .then(() => console.log(" Database connected successfully"))
-  .catch((err) => console.error(" Database connection failed:", err));
+  .then(() => console.log("Database connected successfully"))
+  .catch((err) => console.error("❌ Database connection failed:", err));
 
-//Routes Setup
+// Routes Setup
 app.use("/student", studentRouter);
 app.use("/employee", employeeRouter);
 app.use("/admin", adminRouter);
+app.use("/", authRouter); // Mount universal login at root (/signin)
 
-//  Root Route 
+// Root Route
 app.get("/", (req, res) => {
-  res.send("Grievance Management System Backend Running");
+  res.send("Grievance Management System Backend Running ");
 });
 
-//Start Server 
+// Start Server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`🚀 Server running on http://localhost:${port}`);
 });

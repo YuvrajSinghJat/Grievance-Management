@@ -91,37 +91,40 @@ const signup = asyncHandler( async (req,res) =>{
 )
 
 
-const signin = asyncHandler( async (req,res) =>{
+const signin = asyncHandler(async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
     const findStudentToLogin = await Student.findOne({
-        email : email,
-        password : password
-    }).select("-password")
+        email: email,
+        password: password
+    }).select("-password");
 
-    if(!findStudentToLogin)
-    {
-        throw new ApiError(404,"User not found!")
+    if (!findStudentToLogin) {
+        throw new ApiError(404, "User not found!");
     }
-    console.log(findStudentToLogin)
-    const {accessToken,refreshToken} = await createAccessAndRefeshToken(findStudentToLogin._id)
 
-    const findLoggedUser = await Student.findById(findStudentToLogin._id).select("-password -refreshToken")
+    const { accessToken, refreshToken } = await createAccessAndRefeshToken(findStudentToLogin._id);
 
-    if(!findLoggedUser)
-    {
-        throw new ApiError(404,"User not found! after generating tokens")
+    const findLoggedUser = await Student.findById(findStudentToLogin._id).select("-password -refreshToken");
+
+    if (!findLoggedUser) {
+        throw new ApiError(404, "User not found! after generating tokens");
+    }
+
+    const userWithRole = {
+        ...findLoggedUser._doc, // spread the Mongoose document
+        role: "student"         // add role here
     }
 
     return res
-    .status(200)
-    .cookie("accessToken",accessToken,options)
-    .cookie("refreshToken",refreshToken,options)
-    .json(
-        new ApiResponse(200,findLoggedUser,"User fetch successfully with login")
-    )
-})
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(200, userWithRole, "User fetch successfully with login")
+        );
+});
 
 const logout = asyncHandler( async (req,res,next)=>{
     console.log(req.verificationOfUser._id)
