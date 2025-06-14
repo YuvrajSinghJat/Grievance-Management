@@ -33,7 +33,7 @@ const port = process.env.PORT || 8080;
 
 dbConnect()
   .then(() => console.log("Database connected successfully"))
-  .catch((err) => console.error("❌ Database connection failed:", err));
+  .catch((err) => console.error("Database connection failed:", err));
 
 // Routes Setup
 app.use("/student", studentRouter);
