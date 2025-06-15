@@ -84,7 +84,7 @@ adminSchema.methods.generateRefreshToken = function (){
     return refreshToken
 }
 
-// Define Employee Model
+
 const Admin = mongoose.model('Admin', adminSchema);
 
 module.exports = { Admin }
