@@ -1,13 +1,19 @@
 const express = require("express");
-const { employeeSignin, employeeLogout } = require("../../../controllers/user/employee/auth.controllers");
-const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
+const {
+  employeeSignin,
+  employeeLogout
+} = require("../../../controllers/user/employee/auth.controllers");
+
 const {
   viewAllGrievancesByDOSA,
   viewSingleGrievance,
   viewAllGrievancesByVC,
   actionByDOSA,
-  actionByVC
+  actionByVC,
+  viewAllGrievancesByEmployee 
 } = require("../../../controllers/user/employee/grevianceHandlers.controllers");
+
+const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
 
 const employeeRouter = express.Router();
 
@@ -22,5 +28,8 @@ employeeRouter.post("/viewAllGrievancesByDOSA", verifyEmployeeJWT, viewAllGrieva
 employeeRouter.post("/actionByDOSA", verifyEmployeeJWT, actionByDOSA);
 employeeRouter.post("/viewAllGrievancesByVC", verifyEmployeeJWT, viewAllGrievancesByVC);
 employeeRouter.post("/actionByVC", verifyEmployeeJWT, actionByVC);
+
+//View all grievances for Employee (used in employee grievance dashboard)
+employeeRouter.get("/viewallgrievances", verifyEmployeeJWT, viewAllGrievancesByEmployee);
 
 module.exports = employeeRouter;
