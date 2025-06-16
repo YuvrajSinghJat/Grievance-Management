@@ -1,85 +1,62 @@
-const jwt = require("jsonwebtoken")
-const { asyncHandler } = require("../utility/asyncHandler.js")
-const { ApiError } = require("../utility/ApiError.js")
+const jwt = require("jsonwebtoken");
+const { asyncHandler } = require("../utility/asyncHandler.js");
+const { ApiError } = require("../utility/ApiError.js");
 
-const { Admin } = require("../modals/admin/admin.modals.js")
-const { Student } = require("../modals/user/student.modal.js")
-const { Employee } = require("../modals/user/employee.modal.js")
-//const cookie = require("cookie-parser")
+const { Admin } = require("../modals/admin/admin.modals.js");
+const { Student } = require("../modals/user/student.modal.js");
+const { Employee } = require("../modals/user/employee.modal.js");
 
-const verifyStudentJWT = asyncHandler ( async (req,res,next)=>{
-    console.log(req.cookies)
-    const accessToken = req.cookies.accessToken 
-    const refreshToken = req.cookies.refreshToken
+// Common function to verify token and fetch user
+const verifyToken = async (req, role) => {
+  const token = req.cookies.token; // Use 'token' to match login cookie
 
-    if(!accessToken)
-    {
-        throw new ApiError(401,"Token is not verified")
-    }
+  if (!token) {
+    throw new ApiError(401, "Token is not verified");
+  }
 
-    const tokenDecoding = jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRETKEY)
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    throw new ApiError(401, "Invalid or expired token");
+  }
 
-    const verificationOfUser = await Student.findById(tokenDecoding._id).select("-password -refreshToken" )
+  let user;
+  if (role === "student") {
+    user = await Student.findById(decoded.userId).select("-password");
+  } else if (role === "employee") {
+    user = await Employee.findById(decoded.userId).select("-Password");
+  } else if (role === "admin") {
+    user = await Admin.findById(decoded.userId).select("-adminPassword");
+  }
 
-    if(!verificationOfUser)
-    {
-        throw new ApiError(401,"Token is not verified and user is not found")
-    }
+  if (!user) {
+    throw new ApiError(401, "User not found for this token");
+  }
 
-    req.verificationOfUser = verificationOfUser;
-    next()
+  req.verificationOfUser = user;
+};
 
-})
+// Middleware for student
+const verifyStudentJWT = asyncHandler(async (req, res, next) => {
+  await verifyToken(req, "student");
+  next();
+});
 
-const verifyEmployeeJWT = asyncHandler ( async (req,res,next)=>{
-    const accessToken = req.cookies.accessToken 
-    const refreshToken = req.cookies.refreshToken
+// Middleware for employee
+const verifyEmployeeJWT = asyncHandler(async (req, res, next) => {
+  await verifyToken(req, "employee");
+  next();
+});
 
-    if(!accessToken)
-    {
-        throw new ApiError(401,"Token is not verified")
-    }
+// Middleware for admin
+const verifyAdminJWT = asyncHandler(async (req, res, next) => {
+  await verifyToken(req, "admin");
+  next();
+});
 
-    const tokenDecoding = jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRETKEY)
-
-    const verificationOfUser = await Employee.findById(tokenDecoding._id).select("-password -refreshToken" )
-
-    if(!verificationOfUser)
-    {
-        throw new ApiError(401,"Token is not verified and user is not found")
-    }
-
-    req.verificationOfUser = verificationOfUser;
-    next()
-
-})
-
-const verifyAdminJWT = asyncHandler ( async (req,res,next)=>{
-    const accessToken = req.cookies.accessToken 
-    const refreshToken = req.cookies.refreshToken
-
-    if(!accessToken)
-    {
-        throw new ApiError(401,"Token is not verified")
-    }
-
-    const tokenDecoding = jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRETKEY)
-
-    const verificationOfUser = await Admin.findById(tokenDecoding._id).select("-password -refreshToken" )
-
-    if(!verificationOfUser)
-    {
-        throw new ApiError(401,"Token is not verified and user is not found")
-    }
-
-    req.verificationOfUser = verificationOfUser;
-    next()
-
-})
-
-
-module.exports = { 
-    verifyStudentJWT,
-    verifyEmployeeJWT,
-    verifyAdminJWT
- }
+module.exports = {
+  verifyStudentJWT,
+  verifyEmployeeJWT,
+  verifyAdminJWT,
+};
