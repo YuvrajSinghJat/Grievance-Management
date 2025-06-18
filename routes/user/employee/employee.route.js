@@ -23,6 +23,7 @@ employeeRouter.post("/signin", employeeSignin);
 // Protected Routes
 employeeRouter.post("/logout", verifyEmployeeJWT, employeeLogout);
 
+
 employeeRouter.post("/viewSingleGrievances", verifyEmployeeJWT, viewSingleGrievance);
 employeeRouter.post("/viewAllGrievancesByDOSA", verifyEmployeeJWT, viewAllGrievancesByDOSA);
 employeeRouter.post("/actionByDOSA", verifyEmployeeJWT, actionByDOSA);
