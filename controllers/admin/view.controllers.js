@@ -45,21 +45,19 @@ const viewAllStudents = asyncHandler(async(req,res,next)=>{
 })
 
 const viewAllGrievances = asyncHandler(async(req,res,next)=>{
-    const grievances = await Grievance.find({});
-        if(!grievances){
-            throw new ApiError(200, "No Grievances found")
-        }
-        res
-        .status(200)
-        .json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
-})
+    const grievances = await Grievance.find({}).populate("studentId", "name email"); 
+    if (!grievances) {
+        throw new ApiError(200, "No Grievances found");
+    }
+
+    res.status(200).json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
+});
+
 
 const viewSingleGreviances = asyncHandler(async(req,res,next)=>{
     const grievanceId = req.body.grievanceId;
 
-    const findSingleGrievance = await Grievance.find({
-        _id : grievanceId,
-    })
+    const findSingleGrievance = await Grievance.findById(grievanceId);
 
     if(!findSingleGrievance){
         throw new ApiError(404,"No Grievances found!")

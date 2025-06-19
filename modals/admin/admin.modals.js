@@ -43,7 +43,6 @@ const adminSchema = new Schema(
       type: String 
     }
   }
-    
 );
 
 const options = {
