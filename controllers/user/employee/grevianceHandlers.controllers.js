@@ -66,7 +66,7 @@ const actionByVC = asyncHandler(async (req, res, next) => {
 
 // View all grievances - Employee
 const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
-	// Future Improvement: Filter by department if needed using req.user.department
+	
 	const grievances = await Grievance.find({ status: "Pending" });
 
 	res.status(200).json({ success: true, grievances });

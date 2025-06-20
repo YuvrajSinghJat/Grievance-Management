@@ -10,7 +10,7 @@ const options = {
   secure: true
 };
 
-// ✅ Create Admin Controller
+// Create Admin Controller
 const createAdmin = asyncHandler(async (req, res, next) => {
   const {
     adminId,
@@ -40,7 +40,7 @@ const createAdmin = asyncHandler(async (req, res, next) => {
     adminFaculty,
     adminMobileNo,
     adminEmail,
-    adminPassword // ⚠️ Note: hash this before saving in production
+    adminPassword 
   });
 
   console.log("Admin created:", newAdmin);
@@ -50,7 +50,7 @@ const createAdmin = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(201, newAdmin, "Admin created successfully!"));
 });
 
-// ✅ Create Employee Controller
+// Create Employee Controller
 const createEmployee = asyncHandler(async (req, res, next) => {
   const {
     empId,
@@ -80,7 +80,7 @@ const createEmployee = asyncHandler(async (req, res, next) => {
     Faculty,
     MobileNo,
     Email,
-    Password // ⚠️ Note: hash this before saving in production
+    Password 
   });
 
   await newEmp.save();
@@ -92,7 +92,7 @@ const createEmployee = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(201, newEmp, "Employee created successfully"));
 });
 
-// ✅ Export Controllers
+// Export Controllers
 module.exports = {
   createAdmin,
   createEmployee

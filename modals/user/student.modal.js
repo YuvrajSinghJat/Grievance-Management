@@ -6,55 +6,66 @@ const Schema = mongoose.Schema;
 // Define Student Schema
 const studentSchema = new Schema(
   {
-    enrollmentNo: { 
-      type: String, 
-      required: true, 
-      unique: true 
+    enrollmentNo: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
-    scholarNo: { 
-      type: Number 
+    scholarNo: {
+      type: String,
+      trim: true,
     },
-    name: { 
-      type: String, 
-      required: true 
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    studentProgram: { 
-      type: String 
+    program: {
+      type: String,
+      trim: true,
     },
-    studentDepartment: { 
-      type: String 
+    department: {
+      type: String,
+      trim: true,
     },
-    studentFaculty: { 
-      type: String 
+    faculty: {
+      type: String,
+      trim: true,
     },
-    mobileNo: { 
-      type: Number 
+    mobileNo: {
+      type: String,
+      trim: true,
     },
-    email: { 
-      type: String, 
-      required: true, 
-      unique: true 
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
-    password: { 
-      type: String, 
-      required: true 
+    password: {
+      type: String,
+      required: true,
     },
-    parentName: { 
-      type: String 
+    parentName: {
+      type: String,
+      trim: true,
     },
-    parentContactNo: { 
-      type: Number 
+    parentContactNo: {
+      type: String,
+      trim: true,
     },
-    refreshToken: { 
-      type: String 
-    }
+    refreshToken: {
+      type: String,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-//  Generate Access Token
+// Generate Access Token
 studentSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     { _id: this._id },

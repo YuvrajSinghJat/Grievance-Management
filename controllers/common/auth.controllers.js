@@ -6,11 +6,15 @@ const { ApiResponse } = require("../../utility/ApiResponse");
 const { ApiError } = require("../../utility/ApiError");
 const { asyncHandler } = require("../../utility/asyncHandler");
 
+// Token Generator
 const generateToken = (userId, role) => {
   return jwt.sign({ userId, role }, process.env.JWT_SECRET, {
-    expiresIn: "1d", // you can adjust expiry
+    expiresIn: "1d", // Adjust as needed
   });
 };
+
+
+// Universal Login for All Users
 
 const commonLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -19,12 +23,13 @@ const commonLogin = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Email and password are required");
   }
 
+  // Student Login
   let user = await Student.findOne({ email, password }).select("-password");
   if (user) {
     const token = generateToken(user._id, "student");
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // use false for localhost testing
+      secure: process.env.NODE_ENV === "production", // set false for dev
       sameSite: "Lax",
     });
     return res.status(200).json(
@@ -32,6 +37,7 @@ const commonLogin = asyncHandler(async (req, res) => {
     );
   }
 
+  // Employee Login
   user = await Employee.findOne({ Email: email, Password: password }).select("-Password");
   if (user) {
     const token = generateToken(user._id, "employee");
@@ -45,6 +51,7 @@ const commonLogin = asyncHandler(async (req, res) => {
     );
   }
 
+  // Admin Login
   user = await Admin.findOne({ adminEmail: email, adminPassword: password }).select("-adminPassword");
   if (user) {
     const token = generateToken(user._id, "admin");
@@ -58,7 +65,8 @@ const commonLogin = asyncHandler(async (req, res) => {
     );
   }
 
-  throw new ApiError(404, "User not found");
+  // If no user matched
+  throw new ApiError(404, "Invalid credentials or user not found");
 });
 
 module.exports = { commonLogin };

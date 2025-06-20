@@ -3,10 +3,10 @@ const { ApiError } = require("../../../utility/ApiError.js");
 const { ApiResponse } = require("../../../utility/ApiResponse.js");
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
 
-// ----------------------------
+
 // @desc    File a Grievance
 // @route   POST /student/fileGreviances
-// ----------------------------
+
 const fileGreviances = asyncHandler(async (req, res, next) => {
   const {
     scholarNo,
@@ -62,10 +62,10 @@ const fileGreviances = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(201, grievance, "Grievance successfully filed"));
 });
 
-// ----------------------------
+
 // @desc    View All Grievances of logged-in student
 // @route   POST /student/viewallgreviances
-// ----------------------------
+
 const viewAllGrievances = asyncHandler(async (req, res, next) => {
   const studentId = req.verificationOfUser?._id;
 
@@ -88,10 +88,10 @@ const viewAllGrievances = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
 });
 
-// ----------------------------
+
 // @desc    View Single Grievance by ID
 // @route   POST /student/viewsinglegreviance
-// ----------------------------
+
 const viewSingleGreviances = asyncHandler(async (req, res, next) => {
   const studentId = req.verificationOfUser?._id;
   const { grievanceId } = req.body;
