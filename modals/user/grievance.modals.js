@@ -52,6 +52,8 @@ const grievanceSchema = Schema(
     actionByVC: {
       type: String,
     },
+
+    // Committee Info
     committeeMembers: [
       {
         employeeId: {
@@ -78,6 +80,16 @@ const grievanceSchema = Schema(
     actionOnReportByVC: {
       type: String,
     },
+
+    meetingDate: {
+      type: String, 
+    },
+    meetingTime: {
+      type: String,
+    },
+    meetingVenue: {
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -86,5 +98,4 @@ const grievanceSchema = Schema(
 
 // Define Grievance model
 const Grievance = mongoose.model("Grievance", grievanceSchema);
-
 module.exports = { Grievance };
