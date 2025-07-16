@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const Schema = mongoose.Schema;
 
-// Define Student Schema
+// Student Schema Definition
 const studentSchema = new Schema(
   {
     enrollmentNo: {
@@ -15,6 +15,7 @@ const studentSchema = new Schema(
     scholarNo: {
       type: String,
       trim: true,
+      default: "",
     },
     name: {
       type: String,
@@ -24,18 +25,22 @@ const studentSchema = new Schema(
     program: {
       type: String,
       trim: true,
+      default: "",
     },
     department: {
       type: String,
       trim: true,
+      default: "",
     },
     faculty: {
       type: String,
       trim: true,
+      default: "",
     },
     mobileNo: {
       type: String,
       trim: true,
+      default: "",
     },
     email: {
       type: String,
@@ -51,19 +56,24 @@ const studentSchema = new Schema(
     parentName: {
       type: String,
       trim: true,
+      default: "",
     },
     parentContactNo: {
       type: String,
       trim: true,
+      default: "",
     },
     refreshToken: {
       type: String,
+      default: "",
     },
   },
   {
     timestamps: true,
   }
 );
+
+
 
 // Generate Access Token
 studentSchema.methods.generateAccessToken = function () {
@@ -84,5 +94,5 @@ studentSchema.methods.generateRefreshToken = function () {
 };
 
 // Export Student Model
-const Student = mongoose.model('Student', studentSchema);
-module.exports = { Student };
+const Student = mongoose.model("Student", studentSchema);
+module.exports = Student;

@@ -7,57 +7,60 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-// Serve uploaded files
+
+// Allow static file serving for uploads (like profile images or documents)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Custom Modules
-const { dbConnect } = require("./databaseConfig/connect.database.js");
-
-// Import Routers
-const studentRouter = require("./routes/user/student/student.route.js");
-const employeeRouter = require("./routes/user/employee/employee.route.js");
-const adminRouter = require("./routes/admin/admin.route.js");
-const authRouter = require("./routes/auth.routes.js");
-
-// Corrected paths for Dosa, VC, Registrar routes
-const dosaRouter = require("./routes/user/dosa/dosa.routes.js");
-const vcRouter = require("./routes/user/vc/vc.routes.js");
-const registrarRouter = require("./routes/registrar/registrar.routes.js"); // ✅ corrected path
-
-
-// Middleware Setup
-app.use(cors({
-  origin: "http://localhost:5173", // React frontend origin
-  credentials: true,
-}));
+// Parse cookies
 app.use(cookieParser());
+
+// Parse URL-encoded data and JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Database Connection
+// Allow frontend to access backend (CORS setup for React)
+app.use(cors({
+  origin: "http://localhost:5173", // React dev server
+  credentials: true,
+}));
+
+
+
+const { dbConnect } = require("./databaseConfig/connect.database.js");
+
 const port = process.env.PORT || 8080;
 
 dbConnect()
   .then(() => console.log("Database connected successfully"))
   .catch((err) => console.error("Database connection failed:", err));
 
-// Routes Setup
+
+
+// Universal Auth (SignIn, Send OTP, Reset Password)
+const authRouter = require("./routes/auth.routes.js");
+app.use("/", authRouter);
+
+// User Role Based Routers
+const studentRouter = require("./routes/user/student/student.route.js");
+const employeeRouter = require("./routes/user/employee/employee.route.js");
+const adminRouter = require("./routes/admin/admin.route.js");
+const dosaRouter = require("./routes/user/dosa/dosa.routes.js");
+const vcRouter = require("./routes/user/vc/vc.routes.js");
+const registrarRouter = require("./routes/registrar/registrar.routes.js");
+
+// Attach Routes
 app.use("/student", studentRouter);
 app.use("/employee", employeeRouter);
 app.use("/admin", adminRouter);
-app.use("/", authRouter); // Mount universal login at root (/signin)
-
-// New Role Routes
 app.use("/dosa", dosaRouter);
 app.use("/vc", vcRouter);
 app.use("/registrar", registrarRouter);
 
-// Root Route
+// Test Root Route
 app.get("/", (req, res) => {
   res.send("Grievance Management System Backend Running");
 });
 
-// Start Server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running at: http://localhost:${port}`);
 });
