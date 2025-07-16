@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// ✅ Correct relative path
+// Correct relative path
 const registrarController = require('../../controllers/user/registrar/registrar.controllers.js');
 
 // View forwarded reports from Dosa

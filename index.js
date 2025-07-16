@@ -19,7 +19,7 @@ const employeeRouter = require("./routes/user/employee/employee.route.js");
 const adminRouter = require("./routes/admin/admin.route.js");
 const authRouter = require("./routes/auth.routes.js");
 
-// ✅ Corrected paths for Dosa, VC, Registrar routes
+// Corrected paths for Dosa, VC, Registrar routes
 const dosaRouter = require("./routes/user/dosa/dosa.routes.js");
 const vcRouter = require("./routes/user/vc/vc.routes.js");
 const registrarRouter = require("./routes/registrar/registrar.routes.js"); // ✅ corrected path
@@ -38,8 +38,8 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 8080;
 
 dbConnect()
-  .then(() => console.log("✅ Database connected successfully"))
-  .catch((err) => console.error("❌ Database connection failed:", err));
+  .then(() => console.log("Database connected successfully"))
+  .catch((err) => console.error("Database connection failed:", err));
 
 // Routes Setup
 app.use("/student", studentRouter);
@@ -54,10 +54,10 @@ app.use("/registrar", registrarRouter);
 
 // Root Route
 app.get("/", (req, res) => {
-  res.send("🎯 Grievance Management System Backend Running");
+  res.send("Grievance Management System Backend Running");
 });
 
 // Start Server
 app.listen(port, () => {
-  console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
