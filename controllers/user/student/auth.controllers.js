@@ -1,21 +1,27 @@
 const mongoose = require("mongoose");
-const { Employee } = require("../../../modals/user/employee.modal.js");
-const { Student } = require("../../../modals/user/student.modal.js");
+const Student = require("../../../modals/user/student.modal.js");  // ✅ Correct default export
+const Employee = require("../../../modals/user/employee.modal.js"); // Also default export
+
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
 const { ApiResponse } = require("../../../utility/ApiResponse.js");
 const { ApiError } = require("../../../utility/ApiError.js");
+
 const jwt = require("jsonwebtoken");
 
+// ✅ Secure cookie options
 const options = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === "production", // Only secure in production
+  sameSite: "Lax",
 };
 
-// Generate Access and Refresh Token
-const createAccessAndRefeshToken = async function (_id) {
-  let user = await Student.findById(_id);
-  let accessToken = await user.generateAccessToken();
-  let refreshToken = await user.generateRefreshToken();
+// ✅ Generate Access and Refresh Tokens
+const createAccessAndRefreshToken = async (_id) => {
+  const user = await Student.findById(_id);
+  if (!user) throw new ApiError(404, "Student not found");
+
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
 
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
@@ -23,9 +29,7 @@ const createAccessAndRefeshToken = async function (_id) {
   return { accessToken, refreshToken };
 };
 
-
-// Student Signup Controller
-
+// ✅ Student Signup
 const signup = asyncHandler(async (req, res) => {
   const {
     enrollmentNo,
@@ -75,18 +79,20 @@ const signup = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, studentDetails, "Student registered successfully"));
 });
 
-
-// Student Signin Controller
-
+// ✅ Student Signin
 const signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const student = await Student.findOne({ email, password }).select("-password");
-  if (!student) {
-    throw new ApiError(404, "Invalid email or password");
+  if (!email || !password) {
+    throw new ApiError(400, "Email and password are required");
   }
 
-  const { accessToken, refreshToken } = await createAccessAndRefeshToken(student._id);
+  const student = await Student.findOne({ email, password }); // Don't select "-password" here
+  if (!student) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  const { accessToken, refreshToken } = await createAccessAndRefreshToken(student._id);
 
   const user = await Student.findById(student._id).select("-password -refreshToken");
   if (!user) {
@@ -100,8 +106,7 @@ const signin = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { ...user._doc, role: "student" }, "Login successful"));
 });
 
-// Student Logout Controller
-
+// ✅ Student Logout
 const logout = asyncHandler(async (req, res) => {
   await Student.findByIdAndUpdate(req.verificationOfUser._id, {
     $unset: { refreshToken: "" },
@@ -114,7 +119,7 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Logged out successfully"));
 });
 
-// Placeholder for Employee Auth
+// 🔒 Placeholder: Employee Auth (not implemented yet)
 const employeeSignin = asyncHandler(async (req, res) => {
   res.send("Employee login logic not implemented");
 });
