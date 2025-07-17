@@ -2,21 +2,22 @@ const jwt = require("jsonwebtoken");
 const { asyncHandler } = require("../utility/asyncHandler.js");
 const { ApiError } = require("../utility/ApiError.js");
 
-const { Admin } = require("../modals/admin/admin.modals.js");
-const { Student } = require("../modals/user/student.modal.js");
-const { Employee } = require("../modals/user/employee.modal.js");
+const Student = require("../modals/user/student.modal.js");
+const Employee = require("../modals/user/employee.modal.js");
+const Admin = require("../modals/admin/admin.modals.js");
 
 // Common function to verify token and fetch user
 const verifyToken = async (req, role) => {
-  const token = req.cookies.token; // Use 'token' to match login cookie
+  const token =
+    req.cookies.accessToken || req.cookies.token; // Support both cookie names
 
   if (!token) {
-    throw new ApiError(401, "Token is not verified");
+    throw new ApiError(401, "Token is not provided");
   }
 
   let decoded;
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRETKEY);
   } catch (err) {
     throw new ApiError(401, "Invalid or expired token");
   }
@@ -25,7 +26,7 @@ const verifyToken = async (req, role) => {
   if (role === "student") {
     user = await Student.findById(decoded.userId).select("-password");
   } else if (role === "employee") {
-    user = await Employee.findById(decoded.userId).select("-Password");
+    user = await Employee.findById(decoded.userId).select("-password");
   } else if (role === "admin") {
     user = await Admin.findById(decoded.userId).select("-adminPassword");
   }

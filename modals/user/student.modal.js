@@ -73,21 +73,19 @@ const studentSchema = new Schema(
   }
 );
 
-
-
-// Generate Access Token
+// ✅ Generate Access Token
 studentSchema.methods.generateAccessToken = function () {
   return jwt.sign(
-    { _id: this._id },
+    { userId: this._id }, // ✅ use userId for token payload
     process.env.ACCESS_TOKEN_SECRETKEY,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
 };
 
-// Generate Refresh Token
+// ✅ Generate Refresh Token
 studentSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
-    { _id: this._id },
+    { userId: this._id }, // ✅ use userId for token payload
     process.env.REFRESH_TOKEN_SECRETKEY,
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   );

@@ -24,12 +24,13 @@ exports.sendOtp = async (req, res) => {
   try {
     const user = await isRegisteredUser(email);
     if (!user) {
-      console.log(`❌ OTP Request Denied → Email not registered: ${email}`);
+      console.log(`OTP Request Denied → Email not registered: ${email}`);
       return res.status(404).json({ success: false, message: "Email not registered in the system" });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
     await OTP.create({ email, otp });
+  
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -71,7 +72,7 @@ exports.verifyOtp = async (req, res) => {
 
     res.json({ success: true, message: "OTP verified successfully" });
   } catch (err) {
-    console.error("❌ OTP verification error:", err);
+    console.error("OTP verification error:", err);
     res.status(500).json({ success: false, message: "OTP verification failed" });
   }
 };
