@@ -6,10 +6,9 @@ const Student = require("../modals/user/student.modal.js");
 const Employee = require("../modals/user/employee.modal.js");
 const Admin = require("../modals/admin/admin.modals.js");
 
-// Common function to verify token and fetch user
+// 🔐 Common function to verify token and fetch user
 const verifyToken = async (req, role) => {
-  const token =
-    req.cookies.accessToken || req.cookies.token; // Support both cookie names
+  const token = req.cookies.token;
 
   if (!token) {
     throw new ApiError(401, "Token is not provided");
@@ -17,7 +16,7 @@ const verifyToken = async (req, role) => {
 
   let decoded;
   try {
-    decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRETKEY);
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
     throw new ApiError(401, "Invalid or expired token");
   }
@@ -38,19 +37,20 @@ const verifyToken = async (req, role) => {
   req.verificationOfUser = user;
 };
 
-// Middleware for student
+
+// 🧑‍🎓 Middleware for student
 const verifyStudentJWT = asyncHandler(async (req, res, next) => {
   await verifyToken(req, "student");
   next();
 });
 
-// Middleware for employee
+// 🧑‍💼 Middleware for employee
 const verifyEmployeeJWT = asyncHandler(async (req, res, next) => {
   await verifyToken(req, "employee");
   next();
 });
 
-// Middleware for admin
+// 👨‍💼 Middleware for admin
 const verifyAdminJWT = asyncHandler(async (req, res, next) => {
   await verifyToken(req, "admin");
   next();

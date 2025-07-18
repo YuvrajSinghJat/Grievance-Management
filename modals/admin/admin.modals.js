@@ -1,89 +1,80 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const jwt = require('jsonwebtoken');
 
-// Define admin Schema
+const Schema = mongoose.Schema;
+
+// Define Admin Schema
 const adminSchema = new Schema(
   {
-    adminId: { 
-      type: Number, 
-      required: true, 
-      unique: true 
+    adminId: {
+      type: Number,
+      required: true,
+      unique: true,
     },
-    adminName: { 
-      type: String, 
-      required: true 
+    adminName: {
+      type: String,
+      required: true,
     },
-    adminDesignation: { 
-      type: String, 
-      required: true 
+    adminDesignation: {
+      type: String,
+      required: true,
     },
-    adminDepartment: { 
-      type: String, 
-      required: true 
+    adminDepartment: {
+      type: String,
+      required: true,
     },
-    adminFaculty: { 
-      type: String, 
-      required: true 
+    adminFaculty: {
+      type: String,
+      required: true,
     },
-    adminMobileNo: { 
-      type: Number, 
-      required: true 
+    adminMobileNo: {
+      type: Number,
+      required: true,
     },
-    adminEmail: { 
-      type: String, 
-      required: true, 
-      unique: true 
+    adminEmail: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    adminPassword:{
-      type: String, 
-      required: true 
+    adminPassword: {
+      type: String,
+      required: true,
     },
-    refreshToken :{
-      type: String 
-    }
-  }
+    refreshToken: {
+      type: String,
+    },
+  },
+  { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
-const options = {
-  httpOnly : true,
-  secure : true
-}
+// 🔐 Generate Access Token
+adminSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: 'admin',
+    },
+    process.env.ACCESS_TOKEN_SECRETKEY,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '1d',
+    }
+  );
+};
 
-adminSchema.methods.generateAccessToken = function (){
-    accessToken = jwt.sign(
-      {
-        _id : this._id
-      },
-      process.env.ACCESS_TOKEN_SECRETKEY,
-      {
-        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
-      },
-      {
-        httpOnly : true,
-        secure : true
-      }
-  )
-  return accessToken
-}
-
-adminSchema.methods.generateRefreshToken = function (){
-    refreshToken = jwt.sign({
-      _id : this._id
+// 🔐 Generate Refresh Token
+adminSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: 'admin',
     },
     process.env.REFRESH_TOKEN_SECRETKEY,
     {
-      expiresIn : process.env.REFRESH_TOKEN_EXPIRY
-    },
-    {
-      httpOnly : true,
-      secure : true
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY || '7d',
     }
-    )
-    return refreshToken
-}
-
+  );
+};
 
 const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = { Admin }
+module.exports = { Admin };

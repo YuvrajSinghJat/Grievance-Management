@@ -1,6 +1,8 @@
 const express = require("express");
 const studentRouter = express.Router();
 const upload = require("../../../middlewares/multer.middleware");
+const { getStudentProfile } = require("../../../controllers/user/student/profile.controller.js");
+
 
 // Controllers
 const {
@@ -23,10 +25,14 @@ studentRouter.post("/signup", signup);
 studentRouter.post("/signin", signin);
 studentRouter.get("/logout", verifyStudentJWT, logout);
 
+
 // -------------------- Grievance Routes --------------------
 studentRouter.post("/fileGrievances", verifyStudentJWT, upload.single("proof"), fileGrievances);
 studentRouter.post("/viewallgrievances", verifyStudentJWT, viewAllGrievances);
 studentRouter.post("/viewsinglegrievance", verifyStudentJWT, viewSingleGrievance);
+
+studentRouter.get("/profile", verifyStudentJWT, getStudentProfile);
+
 
 // Export Router
 module.exports = studentRouter;

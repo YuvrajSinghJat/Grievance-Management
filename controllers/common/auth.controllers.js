@@ -1,23 +1,23 @@
 const jwt = require("jsonwebtoken");
 
-// ✅ Import models correctly (Add .js if error persists)
+// ✅ Import models
 const Student = require("../../modals/user/student.modal");
-const Employee = require("../../modals/user/employee.modal");
-const Admin = require("../../modals/admin/admin.modals");
-const RoleUser = require("../../modals/user/roleUser.modal");
+const { Employee } = require("../../modals/user/employee.modal");
+const { Admin } = require("../../modals/admin/admin.modals");
+const { RoleUser } = require("../../modals/user/roleUser.modal.js");
 
 const { ApiResponse } = require("../../utility/ApiResponse");
 const { ApiError } = require("../../utility/ApiError");
 const { asyncHandler } = require("../../utility/asyncHandler");
 
-// Token Generator
+// ✅ Token Generator
 const generateToken = (userId, role) => {
   return jwt.sign({ userId, role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
 
-// Universal Login for All Users
+// ✅ Unified Login Controller (No bcrypt)
 const commonLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -28,8 +28,8 @@ const commonLogin = asyncHandler(async (req, res) => {
   let user;
 
   // 🔹 Student Login
-  user = await Student.findOne({ email, password }).select("-password");
-  if (user) {
+  user = await Student.findOne({ email });
+  if (user && password === user.password) {
     const role = "student";
     const token = generateToken(user._id, role);
 
@@ -40,21 +40,25 @@ const commonLogin = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json(
-      new ApiResponse(200, {
-        data: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role,
+      new ApiResponse(
+        200,
+        {
+          data: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role,
+          },
+          token,
         },
-        token,
-      }, "Student login successful")
+        "Student login successful"
+      )
     );
   }
 
-  // 🔹 RoleUser Login (e.g., VC, DOSA, Registrar, etc.)
-  user = await RoleUser.findOne({ email, password }).select("-password");
-  if (user) {
+  // 🔹 RoleUser Login (VC, DOSA, Registrar)
+  user = await RoleUser.findOne({ email });
+  if (user && password === user.password) {
     const role = user.role.toLowerCase();
     const token = generateToken(user._id, role);
 
@@ -65,20 +69,24 @@ const commonLogin = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json(
-      new ApiResponse(200, {
-        data: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role,
+      new ApiResponse(
+        200,
+        {
+          data: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role,
+          },
+          token,
         },
-        token,
-      }, `${role.toUpperCase()} login successful`)
+        `${role.toUpperCase()} login successful`
+      )
     );
   }
 
   // 🔹 Employee Login
-  user = await Employee.findOne({ Email: email, Password: password }).select("-Password");
+  user = await Employee.findOne({ Email: email, Password: password });
   if (user) {
     const role = "employee";
     const token = generateToken(user._id, role);
@@ -90,22 +98,26 @@ const commonLogin = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json(
-      new ApiResponse(200, {
-        data: {
-          _id: user._id,
-          name: user.Name,
-          email: user.Email,
-          role,
+      new ApiResponse(
+        200,
+        {
+          data: {
+            _id: user._id,
+            name: user.Name,
+            email: user.Email,
+            role,
+          },
+          token,
         },
-        token,
-      }, "Employee login successful")
+        "Employee login successful"
+      )
     );
   }
 
-  // 🔹 Admin Login (includes superadmin)
-  user = await Admin.findOne({ adminEmail: email, adminPassword: password }).select("-adminPassword");
+  // 🔹 Admin Login
+  user = await Admin.findOne({ adminEmail: email, adminPassword: password });
   if (user) {
-    const role = user.adminRole?.toLowerCase() || "admin";
+    const role = "admin";
     const token = generateToken(user._id, role);
 
     res.cookie("token", token, {
@@ -115,19 +127,23 @@ const commonLogin = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json(
-      new ApiResponse(200, {
-        data: {
-          _id: user._id,
-          name: user.adminName,
-          email: user.adminEmail,
-          role,
+      new ApiResponse(
+        200,
+        {
+          data: {
+            _id: user._id,
+            name: user.adminName,
+            email: user.adminEmail,
+            role,
+          },
+          token,
         },
-        token,
-      }, `${role.charAt(0).toUpperCase() + role.slice(1)} login successful`)
+        "Admin login successful"
+      )
     );
   }
 
-  // ❌ If user not found
+  // ❌ User not found
   throw new ApiError(404, "Invalid credentials or user not found");
 });
 

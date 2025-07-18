@@ -10,8 +10,8 @@ const cors = require("cors");
 // Connect MongoDB
 const { dbConnect } = require("./databaseConfig/connect.database.js");
 dbConnect()
-  .then(() => console.log("✅ Database connected successfully"))
-  .catch((err) => console.error("❌ Database connection failed:", err));
+  .then(() => console.log("Database connected successfully"))
+  .catch((err) => console.error("Database connection failed:", err));
 
 const port = process.env.PORT || 8080;
 
@@ -33,7 +33,7 @@ const adminRouter = require("./routes/admin/admin.route.js");
 const dosaRouter = require("./routes/user/dosa/dosa.routes.js");
 const vcRouter = require("./routes/user/vc/vc.routes.js");
 const registrarRouter = require("./routes/registrar/registrar.routes.js");
-const supportRouter = require("./routes/support.js"); // ✅ support route
+const supportRouter = require("./routes/support.js"); // support route
 
 // Use Routers
 app.use("/", authRouter);
@@ -43,14 +43,14 @@ app.use("/admin", adminRouter);
 app.use("/dosa", dosaRouter);
 app.use("/vc", vcRouter);
 app.use("/registrar", registrarRouter);
-app.use("/api/support", supportRouter); // ✅ added support form route
+app.use("/api/support", supportRouter); //  added support form route
 
 // Health check / root
 app.get("/", (req, res) => {
-  res.send("✅ Grievance Management System Backend is Running");
+  res.send("Grievance Management System Backend is Running");
 });
 
 // Start Server
 app.listen(port, () => {
-  console.log(`🚀 Server running at: http://localhost:${port}`);
+  console.log(` Server running at: http://localhost:${port}`);
 });

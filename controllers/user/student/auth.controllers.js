@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-const Student = require("../../../modals/user/student.modal.js");  // ✅ Correct default export
-const Employee = require("../../../modals/user/employee.modal.js"); // Also default export
+
+const Student = require("../../../modals/user/student.modal.js");
+const Employee = require("../../../modals/user/employee.modal.js");
 
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
 const { ApiResponse } = require("../../../utility/ApiResponse.js");
@@ -11,7 +12,7 @@ const jwt = require("jsonwebtoken");
 // ✅ Secure cookie options
 const options = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // Only secure in production
+  secure: process.env.NODE_ENV === "production",
   sameSite: "Lax",
 };
 
@@ -29,7 +30,7 @@ const createAccessAndRefreshToken = async (_id) => {
   return { accessToken, refreshToken };
 };
 
-// ✅ Student Signup
+// ✅ Student Signup (No bcrypt)
 const signup = asyncHandler(async (req, res) => {
   const {
     enrollmentNo,
@@ -59,7 +60,7 @@ const signup = asyncHandler(async (req, res) => {
     scholarNo,
     name,
     email,
-    password,
+    password, // Store as plain text (⚠️ NOT recommended in production)
     mobileNo,
     department,
     faculty,
@@ -79,7 +80,7 @@ const signup = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, studentDetails, "Student registered successfully"));
 });
 
-// ✅ Student Signin
+// ✅ Student Signin (No bcrypt)
 const signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -87,8 +88,8 @@ const signin = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Email and password are required");
   }
 
-  const student = await Student.findOne({ email, password }); // Don't select "-password" here
-  if (!student) {
+  const student = await Student.findOne({ email });
+  if (!student || student.password !== password) {
     throw new ApiError(401, "Invalid email or password");
   }
 
@@ -119,7 +120,7 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Logged out successfully"));
 });
 
-// 🔒 Placeholder: Employee Auth (not implemented yet)
+// 🔒 Placeholder: Employee Auth
 const employeeSignin = asyncHandler(async (req, res) => {
   res.send("Employee login logic not implemented");
 });
