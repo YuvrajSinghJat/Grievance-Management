@@ -1,4 +1,4 @@
-const { Admin } = require("../../modals/admin/admin.modals.js");
+const Admin = require("../../modals/admin/admin.modals.js");
 const { Employee } = require("../../modals/user/employee.modal.js");
 const { ApiResponse } = require("../../utility/ApiResponse.js");
 const { ApiError } = require("../../utility/ApiError.js");
