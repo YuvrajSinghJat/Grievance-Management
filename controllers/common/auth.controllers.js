@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 // ✅ Import models
 const Student = require("../../modals/user/student.modal");
 const { Employee } = require("../../modals/user/employee.modal");
-const { Admin } = require("../../modals/admin/admin.modals");
+const Admin = require("../../modals/admin/admin.modals");
 const { RoleUser } = require("../../modals/user/roleUser.modal.js");
 
 const { ApiResponse } = require("../../utility/ApiResponse");
