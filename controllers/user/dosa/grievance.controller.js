@@ -28,6 +28,22 @@ const getAllGrievancesForDosa = asyncHandler(async (req, res) => {
   }
 });
 
+//view grievance details
+const viewSingleGreviances = asyncHandler(async (req, res) => {
+  const grievanceId = req.body.grievanceId; // ✅ FIXED: read from body
+
+  const findSingleGrievance = await Grievance.findById(grievanceId);
+  if (!findSingleGrievance) {
+    throw new ApiError(404, "No Grievance found!");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, findSingleGrievance, "Grievance retrieved successfully!")
+  );
+});
+
+
 module.exports = {
   getAllGrievancesForDosa,
+  viewSingleGreviances
 };

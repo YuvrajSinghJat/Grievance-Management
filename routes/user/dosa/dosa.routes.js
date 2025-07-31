@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   getAllGrievancesForDosa,
+  viewSingleGreviances
 } = require("../../../controllers/user/dosa/grievance.controller");
 
 const {
@@ -11,6 +12,7 @@ const {
 
 // Existing route
 router.get("/all-grievances", getAllGrievancesForDosa);
+router.post("/viewSingleGrievances", viewSingleGreviances);
 
 // ✅ Add this route
 router.post("/CreateEmployee", createEmployeeByDosa);
