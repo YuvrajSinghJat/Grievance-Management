@@ -30,4 +30,26 @@ const createEmployeeByDosa = async (req, res) => {
   }
 };
 
-module.exports = { createEmployeeByDosa };
+//view all employees
+const DosaViewAllEmployees = async (req, res) => {
+  try {
+    const employees = await Employee.find({});
+
+    if (!employees || employees.length === 0) {
+      return res.status(404).json({ message: "No employees found." });
+    }
+
+    return res.status(200).json({
+      message: "Employees retrieved successfully",
+      data: employees, 
+    });
+  } catch (error) {
+    console.error("Error retrieving employees:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { 
+  createEmployeeByDosa,
+  DosaViewAllEmployees
+};
