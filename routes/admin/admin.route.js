@@ -1,48 +1,50 @@
-const express = require("express")
-const { adminSignin, adminLogout } = require("../../controllers/admin/auth.controllers.js")
-const { verifyAdminJWT } = require("../../middlewares/auth.middleware.js")
-const { createAdmin, createEmployee } = require("../../controllers/admin/create.controllers.js")
-const { viewAllAdmins, viewAllEmployees, viewAllStudents, viewAllGrievances, viewSingleGreviances } = require("../../controllers/admin/view.controllers.js")
-const { getFacultyList } = require("../../controllers/admin/view.controllers.js")
+const express = require("express");
+const adminRouter = express.Router(); // ✅ Declare before using
+
+const { adminSignin, adminLogout } = require("../../controllers/admin/auth.controllers.js");
+const { verifyAdminJWT } = require("../../middlewares/auth.middleware.js");
+const { createAdmin, createEmployee } = require("../../controllers/admin/create.controllers.js");
+const {
+  viewAllAdmins,
+  viewAllEmployees,
+  viewAllStudents,
+  viewAllGrievances,
+  viewSingleGreviances,
+  getFacultyList
+} = require("../../controllers/admin/view.controllers.js");
+
 const { createCommittee } = require("../../controllers/admin/committee.controller.js");
-const { getAllPendingGrievances } = require("../../controllers/admin/grievance.controller.js");
+const {
+  getAllPendingGrievances,
+  getAllCommittees
+} = require("../../controllers/admin/grievance.controller.js");
 
+// ✅ ROUTES
 
-const adminRouter = express.Router()
+adminRouter.route("/signin").post(adminSignin);
 
-adminRouter.route("/signin")//working fine
-.post(adminSignin)
+adminRouter.route("/logout").post(verifyAdminJWT, adminLogout);
 
-adminRouter.route("/logout")//working fine
-.post(verifyAdminJWT , adminLogout)
+adminRouter.route("/createAdmin").post(verifyAdminJWT, createAdmin);
 
-adminRouter.route("/createAdmin")//working fine
-.post(verifyAdminJWT , createAdmin)
+adminRouter.route("/viewAllAdmins").post(verifyAdminJWT, viewAllAdmins);
 
-adminRouter.route("/viewAllAdmins")//working fine
-.post(verifyAdminJWT , viewAllAdmins)
+adminRouter.route("/createEmployee").post(verifyAdminJWT, createEmployee);
 
-adminRouter.route("/createEmployee") //working fine
-.post(verifyAdminJWT , createEmployee)
+adminRouter.route("/viewAllEmployees").post(verifyAdminJWT, viewAllEmployees);
 
-adminRouter.route("/viewAllEmployees") //working fine
-.post(verifyAdminJWT , viewAllEmployees)
+adminRouter.route("/viewAllStudents").post(verifyAdminJWT, viewAllStudents);
 
-adminRouter.route("/viewAllStudents") //working fine
-.post(verifyAdminJWT , viewAllStudents)
+adminRouter.route("/viewAllGrievances").post(verifyAdminJWT, viewAllGrievances);
 
-adminRouter.route("/viewAllGrievances") //working fine
-.post(verifyAdminJWT , viewAllGrievances)
+adminRouter.route("/viewSingleGrievances").post(verifyAdminJWT, viewSingleGreviances);
 
-adminRouter.route("/viewSingleGrievances") //working fine 
-.post(verifyAdminJWT , viewSingleGreviances)
+adminRouter.route("/faculties").get(verifyAdminJWT, getFacultyList);
 
-adminRouter.route("/faculties").get(verifyAdminJWT, getFacultyList); //working fine
-
-adminRouter.route("/createCommittee").post(verifyAdminJWT, createCommittee); // working fine
+adminRouter.route("/createCommittee").post(verifyAdminJWT, createCommittee);
 
 adminRouter.get("/grievances", verifyAdminJWT, getAllPendingGrievances);
 
+adminRouter.get("/getAllCommittees", verifyAdminJWT, getAllCommittees); // ✅ This now works fine
 
-
-module.exports =  adminRouter ;
+module.exports = adminRouter;
