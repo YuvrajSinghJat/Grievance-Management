@@ -29,6 +29,7 @@ adminRouter.route("/createAdmin").post(verifyAdminJWT, createAdmin);
 
 adminRouter.route("/viewAllAdmins").post(verifyAdminJWT, viewAllAdmins);
 
+
 adminRouter.route("/createEmployee").post(verifyAdminJWT, createEmployee);
 
 adminRouter.route("/viewAllEmployees").post(verifyAdminJWT, viewAllEmployees);
