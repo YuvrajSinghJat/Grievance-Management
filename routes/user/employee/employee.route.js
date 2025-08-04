@@ -57,6 +57,9 @@ const {
 
 const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
 
+//create report
+const { createReport } = require("../../../controllers/user/employee/report.controller");
+
 const employeeRouter = express.Router();
 
 // Public Route
@@ -75,6 +78,9 @@ employeeRouter.post("/actionByVC", verifyEmployeeJWT, actionByVC);
 employeeRouter.get("/viewgrievance", verifyEmployeeJWT, viewAllGrievancesByEmployee);
 
 employeeRouter.get("/getSingleCommittees", verifyEmployeeJWT, getSingleCommittees);
+
+//create report route
+employeeRouter.post("/createReport",verifyEmployeeJWT, createReport);
 
 // Chairman's final action
 // employeeRouter.post("/actionByChairman", verifyEmployeeJWT, actionByChairman);
