@@ -39,6 +39,8 @@
 // routes/user/employee/employee.routes.js
 const express = require("express");
 
+const upload = require("../../../middlewares/multer.middleware");
+
 const {
   employeeSignin,
   employeeLogout,
@@ -80,7 +82,7 @@ employeeRouter.get("/viewgrievance", verifyEmployeeJWT, viewAllGrievancesByEmplo
 employeeRouter.get("/getSingleCommittees", verifyEmployeeJWT, getSingleCommittees);
 
 //create report route
-employeeRouter.post("/createReport",verifyEmployeeJWT, createReport);
+employeeRouter.post("/createReport",verifyEmployeeJWT, upload.single("file"), createReport);
 
 // Chairman's final action
 // employeeRouter.post("/actionByChairman", verifyEmployeeJWT, actionByChairman);

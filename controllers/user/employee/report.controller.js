@@ -85,7 +85,7 @@ const createReport = async (req, res) => {
     // });
     // ✅ Update grievance status to 'Resolved'
     await Grievance.findByIdAndUpdate(grievanceId, {
-      $set: { status: "Resolved" },
+    status: "Resolved"
     });
 
     res.status(201).json({ message: "Report submitted successfully." });
