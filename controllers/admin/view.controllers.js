@@ -172,7 +172,7 @@ const getFacultyList = asyncHandler(async (req, res, next) => {
   res.status(200).json(new ApiResponse(200, faculty, "Faculty list fetched successfully"));
 });
 
-
+// ✅ GET Committee List
 const getAllCommittees = asyncHandler(async (req, res) => {
   const grievancesWithCommittee = await Grievance.find({
     committeeMembers: { $exists: true, $not: { $size: 0 } },
