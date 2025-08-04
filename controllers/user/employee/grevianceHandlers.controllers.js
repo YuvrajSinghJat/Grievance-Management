@@ -215,20 +215,54 @@ const actionByChairman = asyncHandler(async (req, res, next) => {
 
 
 // ✅ GET Committee List
-const getAllCommittees = asyncHandler(async (req, res) => {
-  const grievancesWithCommittee = await Grievance.find({
-	committeeMembers: { $exists: true, $not: { $size: 0 } },
-  })
-	.populate("committeeMembers.employeeId", "empName") // Populate faculty name
-	.select("grievanceTitle scholarNo fileName committeeMembers meetingDate meetingTime meetingVenue");
+// const getAllCommittees = asyncHandler(async (req, res) => {
+//   const grievancesWithCommittee = await Grievance.find({
+// 	committeeMembers: { $exists: true, $not: { $size: 0 } },
+//   })
+// 	.populate("committeeMembers.employeeId", "empName") // Populate faculty name
+// 	.select("grievanceTitle scholarNo fileName committeeMembers meetingDate meetingTime meetingVenue");
 
-  if (!grievancesWithCommittee || grievancesWithCommittee.length === 0) {
-	throw new ApiError(404, "No grievances with assigned committees found");
+//   if (!grievancesWithCommittee || grievancesWithCommittee.length === 0) {
+// 	throw new ApiError(404, "No grievances with assigned committees found");
+//   }
+
+//   res
+// 	.status(200)
+// 	.json(new ApiResponse(200, grievancesWithCommittee, "Committees fetched successfully"));
+// });
+
+
+
+const getSingleCommittees = asyncHandler(async (req, res) => {
+  const { grievanceId } = req.query;
+
+  let query = {
+    committeeMembers: { $exists: true, $not: { $size: 0 } },
+  };
+
+  if (grievanceId) {
+    // Validate and convert to ObjectId
+    if (!mongoose.Types.ObjectId.isValid(grievanceId)) {
+      throw new ApiError(400, "Invalid grievanceId");
+    }
+    query._id = new mongoose.Types.ObjectId(grievanceId);
   }
 
-  res
-	.status(200)
-	.json(new ApiResponse(200, grievancesWithCommittee, "Committees fetched successfully"));
+  const grievancesWithCommittee = await Grievance.find(query)
+    .populate("committeeMembers.employeeId", "empName")
+    .select("grievanceTitle scholarNo fileName committeeMembers meetingDate meetingTime meetingVenue");
+
+  if (!grievancesWithCommittee || grievancesWithCommittee.length === 0) {
+    throw new ApiError(404, "No grievances with assigned committees found");
+  }
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      grievanceId ? grievancesWithCommittee[0] : grievancesWithCommittee,
+      grievanceId ? "Committee for specific grievance fetched" : "All committees fetched"
+    )
+  );
 });
 
 
@@ -240,5 +274,5 @@ module.exports = {
 	actionByDOSA,
 	actionByVC,
 	actionByChairman,
-	getAllCommittees,
+	getSingleCommittees,
 };

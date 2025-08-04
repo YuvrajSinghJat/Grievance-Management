@@ -52,7 +52,7 @@ const {
   actionByVC,
   viewAllGrievancesByEmployee,
   actionByChairman,
-  getAllCommittees,
+  getSingleCommittees,
 } = require("../../../controllers/user/employee/grevianceHandlers.controllers");
 
 const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
@@ -74,7 +74,7 @@ employeeRouter.post("/actionByVC", verifyEmployeeJWT, actionByVC);
 // View all grievances for Employee (used in employee grievance dashboard)
 employeeRouter.get("/viewgrievance", verifyEmployeeJWT, viewAllGrievancesByEmployee);
 
-employeeRouter.get("/getAllCommittees", verifyEmployeeJWT, getAllCommittees);
+employeeRouter.get("/getSingleCommittees", verifyEmployeeJWT, getSingleCommittees);
 
 // Chairman's final action
 // employeeRouter.post("/actionByChairman", verifyEmployeeJWT, actionByChairman);
