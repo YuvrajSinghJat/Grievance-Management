@@ -90,7 +90,7 @@
 
 
 
-const { Admin } = require("../../modals/admin/admin.modals.js");
+const {Admin}  = require("../../modals/admin/admin.modals.js");
 const { Employee } = require("../../modals/user/employee.modal.js");
 const { Grievance } = require("../../modals/user/grievance.modals.js");
 const { Student } = require("../../modals/user/student.modal.js");

@@ -74,7 +74,7 @@ const { ApiError } = require("../utility/ApiError.js");
 
 const Student = require("../modals/user/student.modal.js");
 const { Employee } = require("../modals/user/employee.modal.js");
-const Admin = require("../modals/admin/admin.modals.js");
+const {Admin} = require("../modals/admin/admin.modals.js");
 
 // 🔐 Common function to verify token and fetch user
 const verifyToken = async (req, role) => {
