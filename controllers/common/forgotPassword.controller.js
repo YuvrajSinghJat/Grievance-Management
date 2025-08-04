@@ -14,70 +14,70 @@ const isRegisteredUser = async (email) => {
   return student || employee || admin;
 };
 
-// Send OTP to registered user
-// exports.sendOtp = async (req, res) => {
-//   const { email } = req.body;
+//Send OTP to registered user
+exports.sendOtp = async (req, res) => {
+  const { email } = req.body;
 
-//   if (!email) {
-//     return res.status(400).json({ success: false, message: "Email is required" });
-//   }
+  if (!email) {
+    return res.status(400).json({ success: false, message: "Email is required" });
+  }
 
-//   try {
-//     const user = await isRegisteredUser(email);
-//     if (!user) {
-//       console.log(`OTP Request Denied → Email not registered: ${email}`);
-//       return res.status(404).json({ success: false, message: "Email not registered in the system" });
-//     }
+  try {
+    const user = await isRegisteredUser(email);
+    if (!user) {
+      console.log(`OTP Request Denied → Email not registered: ${email}`);
+      return res.status(404).json({ success: false, message: "Email not registered in the system" });
+    }
 
-//     const otp = Math.floor(100000 + Math.random() * 900000);
-//     await OTP.create({ email, otp });
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    await OTP.create({ email, otp });
   
 
-//     const transporter = nodemailer.createTransport({
-//       service: "gmail",
-//       auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS,
-//       },
-//     });
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
-//     await transporter.sendMail({
-//       from: `"Support Team" <${process.env.EMAIL_USER}>`,
-//       to: email,
-//       subject: "Your OTP for password reset",
-//       text: `Your OTP is ${otp}. Please do not share it with anyone.`,
-//     });
+    await transporter.sendMail({
+      from: `"Support Team" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Your OTP for password reset",
+      text: `Your OTP is ${otp}. Please do not share it with anyone.`,
+    });
 
-//     console.log(`OTP sent successfully to: ${email}`);
-//     res.json({ success: true, message: "OTP sent to email" });
-//   } catch (err) {
-//     console.error("Error while sending OTP:", err);
-//     res.status(500).json({ success: false, message: "Failed to send OTP. Please try again." });
-//   }
-// };
+    console.log(`OTP sent successfully to: ${email}`);
+    res.json({ success: true, message: "OTP sent to email" });
+  } catch (err) {
+    console.error("Error while sending OTP:", err);
+    res.status(500).json({ success: false, message: "Failed to send OTP. Please try again." });
+  }
+};
 
-  exports.sendOtp = asyncHandler(async (req, res) => {
-    try {
-      const { email } = req.body;
+  // exports.sendOtp = asyncHandler(async (req, res) => {
+  //   try {
+  //     const { email } = req.body;
 
-      const user = await Student.findOne({ email });
+  //     const user = await Student.findOne({ email });
 
-      if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
-      }
+  //     if (!user) {
+  //       return res.status(404).json({ success: false, message: "User not found" });
+  //     }
 
-      // Dummy OTP logic (replace with your own)
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      console.log(`OTP for ${email}: ${otp}`);
+  //     // Dummy OTP logic (replace with your own)
+  //     const otp = Math.floor(100000 + Math.random() * 900000);
+  //     console.log(`OTP for ${email}: ${otp}`);
 
-      // TODO: send OTP via email service
+  //     // TODO: send OTP via email service
 
-      return res.status(200).json({ success: true, message: "OTP sent", otp });
-    } catch (error) {
-      console.error("Error while sending OTP:", error);
-      return res.status(500).json({ success: false, message: "Internal Server Error" });
-    }
-  });
+  //     return res.status(200).json({ success: true, message: "OTP sent", otp });
+  //   } catch (error) {
+  //     console.error("Error while sending OTP:", error);
+  //     return res.status(500).json({ success: false, message: "Internal Server Error" });
+  //   }
+  // });
 
 // Verify OTP from user
 exports.verifyOtp = async (req, res) => {
