@@ -55,6 +55,19 @@ const grievanceSchema = Schema(
     status: { 
       type: String, default: "Pending" 
     },
+    rejected: {
+    type: Boolean,
+    default: false,
+    },
+    rejectionReason: {
+      type: String,
+    },
+    rejectedBy: {
+      type: String, // e.g., "DOSA", "VC", "Committee"
+    },
+    rejectionReason: {
+    type: String,
+    },
 
     // Committee Info
     committeeMembers: [

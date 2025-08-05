@@ -84,9 +84,60 @@ const forwardToVC = asyncHandler(async (req, res) => {
   );
 });
 
+//to handle rejection
+
+// const rejectGrievance = asyncHandler(async (req, res) => {
+//   const { grievanceId, reason } = req.body;
+
+//   if (!grievanceId || !reason) {
+//     throw new ApiError(400, "Grievance ID and rejection reason required.");
+//   }
+
+//   const grievance = await Grievance.findById(grievanceId);
+//   if (!grievance) {
+//     throw new ApiError(404, "Grievance not found");
+//   }
+
+//   grievance.status = "Rejected";
+//   grievance.rejectionReason = reason; // Add this field to your schema if needed
+//   grievance.rejectedDate = new Date();
+
+//   await grievance.save();
+
+//   return res.status(200).json(
+//     new ApiResponse(200, grievance, "Grievance rejected successfully")
+//   );
+// });
+const rejectGrievance = asyncHandler(async (req, res) => {
+  const { grievanceId } = req.body;
+
+  if (!grievanceId) {
+    throw new ApiError(400, "Grievance ID is required.");
+  }
+
+  const grievance = await Grievance.findById(grievanceId);
+  if (!grievance) {
+    throw new ApiError(404, "Grievance not found");
+  }
+
+  grievance.status = "Rejected";
+  grievance.rejectedDate = new Date();
+
+  // Optional: If rejectionReason field exists, clear it or leave blank
+  grievance.rejectionReason = ""; 
+
+  await grievance.save();
+
+  return res.status(200).json(
+    new ApiResponse(200, grievance, "Grievance rejected successfully")
+  );
+});
+
+
 module.exports = {
   getAllGrievancesForDosa,
   viewSingleGreviances,
   getAllCommittees,
   forwardToVC,
+  rejectGrievance,
 };
