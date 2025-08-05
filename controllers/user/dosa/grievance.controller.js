@@ -74,7 +74,8 @@ const forwardToVC = asyncHandler(async (req, res) => {
 
   grievance.forwardedToVC = true;
   grievance.forwardedDate = new Date();
-  grievance.actionByDosa = actionByDosa;
+  grievance.actionByDosa = actionByDosa || "Reviewed and forwarded to VC";
+  grievance.status = "Forwarded to VC";
 
   await grievance.save();
 

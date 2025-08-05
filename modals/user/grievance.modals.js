@@ -52,6 +52,9 @@ const grievanceSchema = Schema(
     actionByVC: {
       type: String,
     },
+    status: { 
+      type: String, default: "Pending" 
+    },
 
     // Committee Info
     committeeMembers: [

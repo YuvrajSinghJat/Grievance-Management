@@ -5,10 +5,11 @@ const viewController = require('../../../controllers/user/vc/view.controllers');
 const createCommitteecontroller = require('../../../controllers/user/vc/committee.controller');
 const grievanceController = require('../../../controllers/user/vc/grievance.controller');
 
+
 // VC route to view forwarded grievances
 router.get("/reports", viewForwardedReports);
-
-router.post("/viewGrievances", viewController.viewAllGrievances);
+router.post("/viewGrievances", viewController.viewGrievancesForwardedToVC);
+// router.post("/viewGrievances", viewController.viewAllGrievances);
 router.post("/viewSingleGrievances", viewController.viewSingleGrievances);
 router.post('/createCommittee', createCommitteecontroller.createCommittee);
 router.get('/getAllCommittees', viewController.getAllCommittees);

@@ -9,15 +9,28 @@ const options = {
   secure: true,
 };
 
-// ✅ View All Grievances
-const viewAllGrievances = asyncHandler(async (req, res, next) => {
-  const grievances = await Grievance.find({}).populate("studentId", "name email");
-  if (!grievances) {
-    throw new ApiError(404, "No Grievances found");
+// ✅ View Grievances Forwarded to VC
+const viewGrievancesForwardedToVC = asyncHandler(async (req, res, next) => {
+  const grievances = await Grievance.find({ status: "Forwarded to VC" })
+    .populate("studentId", "name email");
+
+  if (!grievances || grievances.length === 0) {
+    throw new ApiError(404, "No grievances forwarded to VC found");
   }
 
-  res.status(200).json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
+  res.status(200).json(new ApiResponse(200, grievances, "Forwarded grievances retrieved successfully"));
 });
+
+
+// // ✅ View All Grievances
+// const viewAllGrievances = asyncHandler(async (req, res, next) => {
+//   const grievances = await Grievance.find({}).populate("studentId", "name email");
+//   if (!grievances) {
+//     throw new ApiError(404, "No Grievances found");
+//   }
+
+//   res.status(200).json(new ApiResponse(200, grievances, "Grievances retrieved successfully"));
+// });
 
 // ✅ View Single Grievance
 const viewSingleGrievances = asyncHandler(async (req, res, next) => {
@@ -65,8 +78,9 @@ const getAllCommittees = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  viewAllGrievances,
+  // viewAllGrievances,
   viewSingleGrievances,
   getFacultyList,
   getAllCommittees,
+  viewGrievancesForwardedToVC,
 };
