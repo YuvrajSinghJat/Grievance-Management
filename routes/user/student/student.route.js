@@ -17,6 +17,8 @@ const {
   viewSingleGrievance,
 } = require("../../../controllers/user/student/grievance.controllers.js");
 
+const { viewgrievanceReport } = require('../../../controllers/user/student/report.controller.js')
+
 // Middleware
 const { verifyStudentJWT } = require("../../../middlewares/auth.middleware.js");
 
@@ -30,6 +32,7 @@ studentRouter.get("/logout", verifyStudentJWT, logout);
 studentRouter.post("/fileGrievances", verifyStudentJWT, upload.single("proof"), fileGrievances);
 studentRouter.post("/viewallgrievances", verifyStudentJWT, viewAllGrievances);
 studentRouter.post("/viewsinglegrievance", verifyStudentJWT, viewSingleGrievance);
+studentRouter.get("/viewreport/:grievanceId" , verifyStudentJWT, viewgrievanceReport);
 
 studentRouter.get("/profile", verifyStudentJWT, getStudentProfile);
 
