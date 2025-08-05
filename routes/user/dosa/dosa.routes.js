@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   getAllGrievancesForDosa,
   viewSingleGreviances,
-  getAllCommittees
+  getAllCommittees,
+  forwardToVC,
 } = require("../../../controllers/user/dosa/grievance.controller");
 
 const {
@@ -18,7 +19,7 @@ router.post("/viewSingleGrievances", viewSingleGreviances);
 // ✅ Add this route
 router.post("/CreateEmployee", createEmployeeByDosa);
 router.post("/viewAllEmployees", DosaViewAllEmployees); 
-
+router.post("/forward-to-vc", forwardToVC);
 router.get("/getAllCommittees",getAllCommittees);
 
 module.exports = router;

@@ -59,8 +59,33 @@ const getAllCommittees = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, grievancesWithCommittee, "Committees fetched successfully"));
 });
 
+//new 
+const forwardToVC = asyncHandler(async (req, res) => {
+  const { grievanceId, actionByDosa } = req.body;
+
+  if (!grievanceId || !actionByDosa) {
+    throw new ApiError(400, "Grievance ID and actionByDosa are required");
+  }
+
+  const grievance = await Grievance.findById(grievanceId);
+  if (!grievance) {
+    throw new ApiError(404, "Grievance not found");
+  }
+
+  grievance.forwardedToVC = true;
+  grievance.forwardedDate = new Date();
+  grievance.actionByDosa = actionByDosa;
+
+  await grievance.save();
+
+  return res.status(200).json(
+    new ApiResponse(200, grievance, "Grievance forwarded to VC successfully")
+  );
+});
+
 module.exports = {
   getAllGrievancesForDosa,
   viewSingleGreviances,
-  getAllCommittees
+  getAllCommittees,
+  forwardToVC,
 };
