@@ -60,7 +60,10 @@ const {
 const { verifyEmployeeJWT } = require("../../../middlewares/auth.middleware");
 
 //create report
-const { createReport } = require("../../../controllers/user/employee/report.controller");
+const { 
+  createReport,
+  viewgrievanceReport,
+  } = require("../../../controllers/user/employee/report.controller");
 
 const employeeRouter = express.Router();
 
@@ -83,6 +86,7 @@ employeeRouter.get("/getSingleCommittees", verifyEmployeeJWT, getSingleCommittee
 
 //create report route
 employeeRouter.post("/createReport",verifyEmployeeJWT, upload.single("file"), createReport);
+employeeRouter.get("/viewreport/:grievanceId", verifyEmployeeJWT, viewgrievanceReport);
 
 // Chairman's final action
 // employeeRouter.post("/actionByChairman", verifyEmployeeJWT, actionByChairman);
