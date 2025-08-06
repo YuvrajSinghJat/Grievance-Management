@@ -24,6 +24,78 @@ const getAllPendingGrievances = asyncHandler(async (req, res) => {
   }
 });
 
+// const vcRejectGrievance = asyncHandler(async (req, res) => {
+//   const { grievanceId } = req.body;
+
+//   if (!grievanceId) {
+//     throw new ApiError(400, "Grievance ID is required.");
+//   }
+
+//   const grievance = await Grievance.findById(grievanceId);
+//   if (!grievance) {
+//     throw new ApiError(404, "Grievance not found");
+//   }
+
+//   grievance.status = "Rejected";
+//   grievance.rejectedDate = new Date();
+//   grievance.rejectionReason = "";
+//   grievance.rejectedBy = "VC";
+
+//   await grievance.save();
+
+//   return res.status(200).json(
+//     new ApiResponse(200, grievance, "Grievance rejected successfully")
+//   );
+// });
+const vcRejectGrievance = async (req, res) => {
+  try {
+    const { grievanceId } = req.body;
+    if (!grievanceId) {
+      return res.status(400).json({ message: "Grievance ID is required" });
+    }
+
+    const updatedGrievance = await Grievance.findByIdAndUpdate(
+      grievanceId,
+      { status: "Rejected by VC" },
+      { new: true }
+    );
+
+    if (!updatedGrievance) {
+      return res.status(404).json({ message: "Grievance not found" });
+    }
+
+    res.status(200).json({ message: "Grievance rejected successfully", grievance: updatedGrievance });
+  } catch (error) {
+    console.error("Error rejecting grievance:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const getAllVcRejectedGrievances = asyncHandler(async (req, res) => {
+  try {
+    console.log("Hitting getAllVcRejectedGrievances");
+
+    const grievances = await Grievance.find({
+      status: "Rejected",
+      rejectedBy: "VC",
+    }).populate("studentId", "name email")
+      .select("_id grievanceTitle grievanceType status proof scholarNo rejectedDate rejectionReason studentId");
+
+    if (!grievances || grievances.length === 0) {
+      return res.status(404).json({ success: false, message: "No VC rejected grievances found" });
+    }
+
+    return res.status(200).json({ success: true, data: grievances });
+  } catch (err) {
+    console.error("ERROR in getAllVcRejectedGrievances:", err);
+    return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
+  
+
 module.exports = {
   getAllPendingGrievances,
+  vcRejectGrievance,
+  getAllVcRejectedGrievances,
 };

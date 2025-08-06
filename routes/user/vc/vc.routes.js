@@ -16,4 +16,10 @@ router.get('/getAllCommittees', viewController.getAllCommittees);
 router.get('/faculties', viewController.getFacultyList);
 router.get('/grivances', grievanceController.getAllPendingGrievances);
 
+// reject route
+
+router.post('/reject-grievance',grievanceController.vcRejectGrievance);
+router.get('/rejected-grievance',grievanceController.getAllVcRejectedGrievances)
+
+
 module.exports = router;

@@ -62,11 +62,13 @@ const grievanceSchema = Schema(
     rejectionReason: {
       type: String,
     },
+    // rejectedBy: {
+    //   type: String, // e.g., "DOSA", "VC", "Committee"
+    // },
     rejectedBy: {
-      type: String, // e.g., "DOSA", "VC", "Committee"
-    },
-    rejectionReason: {
-    type: String,
+    type: String, // or an enum like ['VC', 'DOSA']
+    enum: ['VC', 'DOSA'],
+    default: null,
     },
 
     // Committee Info
