@@ -6,6 +6,7 @@ const {
   getAllCommittees,
   forwardToVC,
   rejectGrievance,
+  getAllPendingGrievances,
 } = require("../../../controllers/user/dosa/grievance.controller");
 
 const {
@@ -17,6 +18,8 @@ const {
   createReport,
   viewgrievanceReport,
 }= require('../../../controllers/user/dosa/report.controller');
+
+const{ getFacultyList } = require('../../../controllers/user/dosa/view.contoller');
 
 const upload = require("../../../middlewares/multer.middleware");
 
@@ -32,6 +35,9 @@ router.post("/forward-to-vc", forwardToVC);
 //New report route
 router.post("/CreateReport",upload.single("file"), createReport);
 router.get("/viewreport/:grievanceId", viewgrievanceReport);
+
+router.get('/grievances',getAllPendingGrievances);
+router.get('/faculties',getFacultyList);
 
 //to handle rejection
 
