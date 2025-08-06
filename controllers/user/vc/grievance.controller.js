@@ -124,6 +124,28 @@ const getAllVcRejectedGrievances = asyncHandler(async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
   }
 });
+
+//VC forwarding grievances to Registrar
+const forwardToRegistrar = asyncHandler(async (req, res) => {
+  const { grievanceId } = req.body;
+
+  if (!grievanceId) {
+    throw new ApiError(400, "Grievance ID is required.");
+  }
+
+  const grievance = await Grievance.findById(grievanceId);
+  if (!grievance) {
+    throw new ApiError(404, "Grievance not found.");
+  }
+
+  grievance.status = "Forwarded to Registrar";
+  await grievance.save();
+
+  return res.status(200).json(
+    new ApiResponse(200, grievance, "Grievance forwarded to Registrar successfully.")
+  );
+});
+
   
 
 module.exports = {
@@ -132,4 +154,5 @@ module.exports = {
   getAllVcRejectedGrievances,
   getOngoingGrievances,
   getResolvedGrievances,
+  forwardToRegistrar,
 };

@@ -22,6 +22,7 @@ router.post('/reject-grievance',grievanceController.vcRejectGrievance);
 router.get('/rejected-grievance',grievanceController.getAllVcRejectedGrievances);
 router.get('/resolved-grievances', grievanceController.getResolvedGrievances);
 router.get('/ongoing-grievances', grievanceController.getOngoingGrievances);
+router.post('/forward-to-registrar', grievanceController.forwardToRegistrar);
 
 
 
