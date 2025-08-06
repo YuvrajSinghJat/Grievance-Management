@@ -27,7 +27,8 @@ const getAllPendingGrievances = asyncHandler(async (req, res) => {
 
 const getOngoingGrievances = asyncHandler(async (req, res) => {
   try {
-    const grievances = await Grievance.find({ status: "Committee Assigned" });
+    const grievances = await Grievance.find({ status: "Committee Assigned" })
+    .populate("studentId", "name scholarNo email");
 
     if (!grievances || grievances.length === 0) {
       return res.status(404).json({ success: false, message: "No ongoing grievances found" });
@@ -41,7 +42,8 @@ const getOngoingGrievances = asyncHandler(async (req, res) => {
 
 const getResolvedGrievances = asyncHandler(async (req, res) => {
   try {
-    const grievances = await Grievance.find({ status: "Resolved" });
+    const grievances = await Grievance.find({ status: "Resolved" })
+    .populate("studentId", "name scholarNo email");
 
     if (!grievances || grievances.length === 0) {
       return res.status(404).json({ success: false, message: "No resolved grievances found" });
