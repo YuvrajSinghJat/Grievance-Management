@@ -8,7 +8,7 @@ const getAllPendingGrievances = asyncHandler(async (req, res) => {
   try {
     console.log("Hitting getAllPendingGrievances");
 
-    const grievances = await Grievance.find({ status: "Pending" })
+    const grievances = await Grievance.find({ status: "Forwarded to VC" })
       .select("_id grievanceTitle scholarNo meetingDate meetingTime meetingVenue");
 
     if (!grievances || grievances.length === 0) {
@@ -23,6 +23,36 @@ const getAllPendingGrievances = asyncHandler(async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
   }
 });
+
+
+const getOngoingGrievances = asyncHandler(async (req, res) => {
+  try {
+    const grievances = await Grievance.find({ status: "Committee Assigned" });
+
+    if (!grievances || grievances.length === 0) {
+      return res.status(404).json({ success: false, message: "No ongoing grievances found" });
+    }
+
+    return res.status(200).json({ success: true, data: grievances });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
+
+const getResolvedGrievances = asyncHandler(async (req, res) => {
+  try {
+    const grievances = await Grievance.find({ status: "Resolved" });
+
+    if (!grievances || grievances.length === 0) {
+      return res.status(404).json({ success: false, message: "No resolved grievances found" });
+    }
+
+    return res.status(200).json({ success: true, data: grievances });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
+
 
 // const vcRejectGrievance = asyncHandler(async (req, res) => {
 //   const { grievanceId } = req.body;
@@ -98,4 +128,6 @@ module.exports = {
   getAllPendingGrievances,
   vcRejectGrievance,
   getAllVcRejectedGrievances,
+  getOngoingGrievances,
+  getResolvedGrievances,
 };
