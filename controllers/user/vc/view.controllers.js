@@ -3,6 +3,7 @@ const { ApiResponse } = require("../../../utility/ApiResponse.js");
 const { ApiError } = require("../../../utility/ApiError.js");
 const { asyncHandler } = require("../../../utility/asyncHandler.js");
 const { Employee } = require('../../../modals/user/employee.modal.js');
+const CommitteeReport = require('../../../modals/user/report.modal.js');
 const mongoose = require("mongoose");
 
 const options = {
@@ -111,6 +112,54 @@ const getSingleCommittees = asyncHandler(async (req, res) => {
   );
 });
 
+// ✅ View Report
+const viewgrievanceReport = async (req, res) => {
+  try {
+    const { grievanceId } = req.params;
+
+    // Fetch grievance and populate studentId (to get student name)
+    const grievance = await Grievance.findById(grievanceId).populate("studentId","name scholarNo email department");
+    // console.log("StudentId populated:", grievance.studentId); // 👈 ADD THIS
+
+    if (!grievance) {
+      return res.status(404).json({
+        success: false,
+        message: "Grievance not found.",
+      });
+    }
+
+    const report = await CommitteeReport.findOne({ grievanceId });
+
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: "Report not found for this grievance.",
+      });
+    }
+
+    const responseData = {
+      status: grievance.status,
+      student: grievance.studentId, // ✅ now sending full student info
+      subject: grievance.grievanceTitle,
+      reportText: report.reportText,
+      attachment: report.fileUrl || null,
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Grievance report fetched successfully.",
+      data: responseData,
+    });
+
+  } catch (error) {
+    console.error("Error in viewGrievanceReport:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
 module.exports = {
   // viewAllGrievances,
   viewSingleGrievances,
@@ -118,4 +167,5 @@ module.exports = {
   getAllCommittees,
   viewGrievancesForwardedToVC,
   getSingleCommittees,
+  viewgrievanceReport,
 };

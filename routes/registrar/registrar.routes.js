@@ -17,4 +17,6 @@ router.post('/update-grievance-status', registrarController.updateGrievanceStatu
 router.post('/allgrievanceregistrar', viewgrievancecontroller.viewAllGrievances);
 router.post('/viewSingleGrievances', viewgrievancecontroller.viewSingleGrievances);
 
+router.get('/viewreport/:grievanceId', viewgrievancecontroller.viewgrievanceReport);
+
 module.exports = router;

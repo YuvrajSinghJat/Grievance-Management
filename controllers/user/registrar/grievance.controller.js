@@ -16,4 +16,5 @@ const getAllGrievances = async (req, res) => {
 
 module.exports = {
   getAllGrievances,
+  
 };
