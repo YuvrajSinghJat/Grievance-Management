@@ -2,6 +2,7 @@ const { Grievance } = require("../../../modals/user/grievance.modals");
 const { ApiError } = require("../../../utility/ApiError");
 const { ApiResponse } = require("../../../utility/ApiResponse");
 const { asyncHandler } = require("../../../utility/asyncHandler");
+const mongoose = require("mongoose");
 
 // @desc View All Grievances for DOSA
 // @route GET /dosa/all-grievances
@@ -154,6 +155,38 @@ const rejectGrievance = asyncHandler(async (req, res) => {
   );
 });
 
+const getSingleCommittees = asyncHandler(async (req, res) => {
+  const { grievanceId } = req.query;
+
+  let query = {
+    committeeMembers: { $exists: true, $not: { $size: 0 } },
+  };
+
+  if (grievanceId) {
+    // Validate and convert to ObjectId
+    if (!mongoose.Types.ObjectId.isValid(grievanceId)) {
+      throw new ApiError(400, "Invalid grievanceId");
+    }
+    query._id = new mongoose.Types.ObjectId(grievanceId);
+  }
+
+  const grievancesWithCommittee = await Grievance.find(query)
+    .populate("committeeMembers.employeeId", "empName")
+    .select("grievanceTitle scholarNo fileName committeeMembers meetingDate meetingTime meetingVenue");
+
+  if (!grievancesWithCommittee || grievancesWithCommittee.length === 0) {
+    throw new ApiError(404, "No grievances with assigned committees found");
+  }
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      grievanceId ? grievancesWithCommittee[0] : grievancesWithCommittee,
+      grievanceId ? "Committee for specific grievance fetched" : "All committees fetched"
+    )
+  );
+});
+
 
 module.exports = {
   getAllGrievancesForDosa,
@@ -162,4 +195,5 @@ module.exports = {
   forwardToVC,
   rejectGrievance,
   getAllPendingGrievances,
+  getSingleCommittees,
 };

@@ -7,6 +7,7 @@ const {
   forwardToVC,
   rejectGrievance,
   getAllPendingGrievances,
+  getSingleCommittees,
 } = require("../../../controllers/user/dosa/grievance.controller");
 
 const {
@@ -35,6 +36,7 @@ router.post("/forward-to-vc", forwardToVC);
 //New report route
 router.post("/CreateReport",upload.single("file"), createReport);
 router.get("/viewreport/:grievanceId", viewgrievanceReport);
+router.get('/getSingleCommittees',getSingleCommittees);
 
 router.get('/grievances',getAllPendingGrievances);
 router.get('/faculties',getFacultyList);

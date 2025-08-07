@@ -10,7 +10,9 @@ const {
   viewAllStudents,
   viewAllGrievances,
   viewSingleGreviances,
-  getFacultyList
+  getFacultyList,
+  getSingleCommittees,
+  viewgrievanceReport,
 } = require("../../controllers/admin/view.controllers.js");
 
 const { createCommittee } = require("../../controllers/admin/committee.controller.js");
@@ -47,5 +49,9 @@ adminRouter.route("/createCommittee").post(verifyAdminJWT, createCommittee);
 adminRouter.get("/grievances", verifyAdminJWT, getAllPendingGrievances);
 
 adminRouter.get("/getAllCommittees", verifyAdminJWT, getAllCommittees); // ✅ This now works fine
+
+adminRouter.get("/getSingleCommittees",verifyAdminJWT, getSingleCommittees);
+
+adminRouter.get('/viewreport/:grievanceId',verifyAdminJWT, viewgrievanceReport);
 
 module.exports = adminRouter;
