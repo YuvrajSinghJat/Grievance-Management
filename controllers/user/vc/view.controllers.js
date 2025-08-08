@@ -13,7 +13,7 @@ const options = {
 
 // ✅ View Grievances Forwarded to VC
 const viewGrievancesForwardedToVC = asyncHandler(async (req, res, next) => {
-  const grievances = await Grievance.find({ status: "Forwarded to VC" })
+  const grievances = await Grievance.find({ status: { $in: ["Forwarded to VC", "Committee Report"] } })
     .populate("studentId", "name email");
 
   if (!grievances || grievances.length === 0) {
