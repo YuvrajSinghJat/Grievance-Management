@@ -63,6 +63,36 @@ const CommitteeReport = require("../../../modals/user/report.modal");
 const { Grievance } = require("../../../modals/user/grievance.modals");
 
 // ✅ Create Report
+// const createReport = async (req, res) => {
+//   try {
+//     const { grievanceId, reportText } = req.body;
+
+//     if (!grievanceId || !reportText) {
+//       return res.status(400).json({ message: "All fields are required." });
+//     }
+
+//     const fileUrl = req.file ?`/uploads/${req.file.filename}` : "";
+
+//     const newReport = new CommitteeReport({
+//       grievanceId,
+//       reportText,
+//       fileUrl,
+//     });
+
+//     await newReport.save();
+
+//     // ✅ Update the grievance status to 'Resolved'
+//     await Grievance.findByIdAndUpdate(grievanceId, {
+//       status: "Report Created",
+//     });
+
+//     res.status(201).json({ message: "Report submitted successfully." });
+//   } catch (error) {
+//     console.error("Error while creating report:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
 const createReport = async (req, res) => {
   try {
     const { grievanceId, reportText } = req.body;
@@ -71,27 +101,34 @@ const createReport = async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    const fileUrl = req.file ?`/uploads/${req.file.filename}` : "";
+    const fileUrl = req.file ? `/uploads/${req.file.filename}` : "";
 
-    const newReport = new CommitteeReport({
+    // Upsert = update if exists, else create
+    const updatedReport = await CommitteeReport.findOneAndUpdate(
+      { grievanceId },
+      { reportText, fileUrl },
+      { new: true, upsert: true } // upsert creates if not exists
+    );
+
+    // ✅ Update grievance status
+    const updatedGrievance = await Grievance.findByIdAndUpdate(
       grievanceId,
-      reportText,
-      fileUrl,
+      { status: "Report Created" },
+      { new: true }
+    );
+
+    res.status(201).json({
+      message: "Report saved successfully.",
+      grievance: updatedGrievance,
+      report: updatedReport
     });
-
-    await newReport.save();
-
-    // ✅ Update the grievance status to 'Resolved'
-    await Grievance.findByIdAndUpdate(grievanceId, {
-      status: "Report Created",
-    });
-
-    res.status(201).json({ message: "Report submitted successfully." });
   } catch (error) {
-    console.error("Error while creating report:", error);
+    console.error("Error while creating/updating report:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
 
 // ✅ View Report
 const viewgrievanceReport = async (req, res) => {
@@ -109,7 +146,7 @@ const viewgrievanceReport = async (req, res) => {
       });
     }
 
-    const report = await CommitteeReport.findOne({ grievanceId });
+    const report = await CommitteeReport.findOne({ grievanceId }).sort({ updatedAt: -1 }); // latest first;
 
     if (!report) {
       return res.status(404).json({

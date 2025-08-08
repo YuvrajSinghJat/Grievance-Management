@@ -16,7 +16,7 @@ const mongoose = require("mongoose");
 //Dosa view all grievances
 const getAllGrievancesForDosa = asyncHandler(async (req, res) => {
   try {
-    const grievances = await Grievance.find({});
+    const grievances = await Grievance.find({}).populate("studentId", "name scholarNo email");
 
     if (!grievances || grievances.length === 0) {
       return res.status(404).json(new ApiResponse(404, null, "No grievances found"));
@@ -35,6 +35,7 @@ const getAllPendingGrievances = asyncHandler(async (req, res) => {
     console.log("Hitting getAllPendingGrievances");
 
     const grievances = await Grievance.find({ status: "Pending" })
+      .populate("studentId", "name scholarNo email")
       .select("_id grievanceTitle scholarNo meetingDate meetingTime meetingVenue");
 
     if (!grievances || grievances.length === 0) {

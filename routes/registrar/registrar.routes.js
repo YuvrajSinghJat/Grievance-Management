@@ -19,4 +19,6 @@ router.post('/viewSingleGrievances', viewgrievancecontroller.viewSingleGrievance
 
 router.get('/viewreport/:grievanceId', viewgrievancecontroller.viewgrievanceReport);
 
+router.post('/markResolved', viewgrievancecontroller.markResolved)
+
 module.exports = router;

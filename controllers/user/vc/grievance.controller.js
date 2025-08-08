@@ -146,7 +146,48 @@ const forwardToRegistrar = asyncHandler(async (req, res) => {
   );
 });
 
-  
+const vcReconsiderGrievance = async (req, res) => {
+  try {
+    const { grievanceId } = req.body;
+
+    // Find the grievance
+    const grievance = await Grievance.findById(grievanceId);
+    if (!grievance) {
+      return res.status(404).json({ message: "Grievance not found" });
+    }
+
+    // If you store assigned committee in grievance, don't remove it, just change status
+    grievance.status = "Reconsider";
+    grievance.updatedAt = new Date();
+
+    await grievance.save();
+
+    res.status(200).json({
+      message: "Grievance status updated to Reconsider and sent to the same committee",
+      data: grievance
+    });
+
+  } catch (err) {
+    console.error("Error in vcReconsiderGrievance:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getReconsiderGrievances = asyncHandler(async (req, res) => {
+  try {
+    const grievances = await Grievance.find({ status: "Reconsider" })
+      .populate("studentId", "name scholarNo email");
+
+    if (!grievances || grievances.length === 0) {
+      return res.status(404).json({ success: false, message: "No reconsider grievances found" });
+    }
+
+    return res.status(200).json({ success: true, data: grievances });
+  } catch (err) {
+    console.error("Error in getReconsiderGrievances:", err);
+    return res.status(500).json({ success: false, message: "Internal server error", error: err.message });
+  }
+});
 
 module.exports = {
   getAllPendingGrievances,
@@ -155,4 +196,6 @@ module.exports = {
   getOngoingGrievances,
   getResolvedGrievances,
   forwardToRegistrar,
+  vcReconsiderGrievance,
+  getReconsiderGrievances,
 };

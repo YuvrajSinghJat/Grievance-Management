@@ -86,8 +86,38 @@ const viewgrievanceReport = async (req, res) => {
   }
 };
 
+const markResolved = async (req, res) => {
+  try {
+    const { grievanceId } = req.body;
+
+    if (!grievanceId) {
+      return res.status(400).json({ message: "Grievance ID is required." });
+    }
+
+    const updatedGrievance = await Grievance.findByIdAndUpdate(
+      grievanceId,
+      { status: "Resolved" },
+      { new: true }
+    );
+
+    if (!updatedGrievance) {
+      return res.status(404).json({ message: "Grievance not found." });
+    }
+
+    res.status(200).json({
+      message: "Grievance marked as resolved.",
+      data: updatedGrievance,
+    });
+  } catch (error) {
+    console.error("Error marking grievance resolved:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   viewAllGrievances,
   viewSingleGrievances,
   viewgrievanceReport,
+  markResolved,
 };

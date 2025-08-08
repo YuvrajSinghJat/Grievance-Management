@@ -27,6 +27,13 @@ router.get('/resolved-grievances', grievanceController.getResolvedGrievances);
 router.get('/ongoing-grievances', grievanceController.getOngoingGrievances);
 router.post('/forward-to-registrar', grievanceController.forwardToRegistrar);
 
+//reconsider route
+
+// reconsider route
+router.post('/reconsider-grievance', grievanceController.vcReconsiderGrievance);
+router.get("/reconsidered-grievances", grievanceController.getReconsiderGrievances);
+
+
 
 
 module.exports = router;

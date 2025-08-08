@@ -177,21 +177,48 @@ const actionByVC = asyncHandler(async (req, res, next) => {
 	res.status(200).json({ success: true, message: "Action taken by VC", grievance });
 });
 
-// View all grievances - Employee (only assigned ones)
+// // View all grievances - Employee (only assigned ones)
+// const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
+// 	const employeeId = req.verificationOfUser._id;
+
+// 	const grievances = await Grievance.find({
+// 		$or: [
+// 			{ "committeeMembers.employeeId": employeeId }, // Committee member
+// 			{ "chairman.employeeId": employeeId }         // Chairman of the committee
+// 		]
+// 	});
+
+// 	res.status(200).json(
+// 		new ApiResponse(200, grievances, "Filtered grievances for employee (assigned or chairperson)")
+// 	);
+// });
 const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
-	const employeeId = req.verificationOfUser._id;
+  const employeeId = req.verificationOfUser._id;
 
-	const grievances = await Grievance.find({
-		$or: [
-			{ "committeeMembers.employeeId": employeeId }, // Committee member
-			{ "chairman.employeeId": employeeId }         // Chairman of the committee
-		]
-	});
+  const grievances = await Grievance.find({
+    $or: [
+      { "committeeMembers.employeeId": employeeId }, // Committee member
+      { "chairman.employeeId": employeeId }          // Chairman of the committee
+    ]
+  }).lean(); // lean() makes it plain JS objects, easier to modify
 
-	res.status(200).json(
-		new ApiResponse(200, grievances, "Filtered grievances for employee (assigned or chairperson)")
-	);
+  // Transform status for employee view
+  const modifiedGrievances = grievances.map(g => {
+    if (g.status?.toLowerCase() === "committee report") {
+      return { ...g, status: "Forwarded to VC" };
+    }
+    return g;
+  });
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      modifiedGrievances,
+      "Filtered grievances for employee (with status adjusted for view)"
+    )
+  );
 });
+
 
 // Take action - Chairman
 const actionByChairman = asyncHandler(async (req, res, next) => {
