@@ -7,19 +7,30 @@ const reportSchema = new mongoose.Schema({
     ref: "Grievance",
     required: true,
   },
-  reportText: {
-    type: String,
-    required: true,
+  // reportText: {
+  //   type: String,
+  //   required: true,
+  // },
+  briefHistory: { 
+    type: String, 
+    required: true 
   },
+
+  findings: {
+    type: String, 
+    required: true 
+  },
+recommendations: [
+  {
+    enrollment: { type: String, required: true },
+    recommendation: { type: String, required: true }
+  }
+],
   fileUrl: {
     type: String,
     default: "",
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 const CommitteeReport = mongoose.model("CommitteeReport", reportSchema);
 module.exports = CommitteeReport;

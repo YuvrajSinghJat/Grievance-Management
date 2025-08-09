@@ -39,13 +39,61 @@ const viewSingleGrievances = asyncHandler(async (req, res, next) => {
 });
 
 // ✅ View Report
+// const viewgrievanceReport = async (req, res) => {
+//   try {
+//     const { grievanceId } = req.params;
+
+//     // Fetch grievance and populate studentId (to get student name)
+//     const grievance = await Grievance.findById(grievanceId).populate("studentId","name scholarNo email department");
+//     // console.log("StudentId populated:", grievance.studentId); // 👈 ADD THIS
+
+//     if (!grievance) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Grievance not found.",
+//       });
+//     }
+
+//     const report = await CommitteeReport.findOne({ grievanceId });
+
+//     if (!report) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Report not found for this grievance.",
+//       });
+//     }
+
+//     const responseData = {
+//       status: grievance.status,
+//       student: grievance.studentId, // ✅ now sending full student info
+//       subject: grievance.grievanceTitle,
+//       reportText: report.reportText,
+//       attachment: report.fileUrl || null,
+//     };
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Grievance report fetched successfully.",
+//       data: responseData,
+//     });
+
+//   } catch (error) {
+//     console.error("Error in viewGrievanceReport:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Internal server error.",
+//     });
+//   }
+// };
+
+
+// ✅ View Report
 const viewgrievanceReport = async (req, res) => {
   try {
     const { grievanceId } = req.params;
 
-    // Fetch grievance and populate studentId (to get student name)
-    const grievance = await Grievance.findById(grievanceId).populate("studentId","name scholarNo email department");
-    // console.log("StudentId populated:", grievance.studentId); // 👈 ADD THIS
+    const grievance = await Grievance.findById(grievanceId)
+      .populate("studentId", "name scholarNo email department");
 
     if (!grievance) {
       return res.status(404).json({
@@ -54,7 +102,7 @@ const viewgrievanceReport = async (req, res) => {
       });
     }
 
-    const report = await CommitteeReport.findOne({ grievanceId });
+    const report = await CommitteeReport.findOne({ grievanceId }).sort({ updatedAt: -1 });
 
     if (!report) {
       return res.status(404).json({
@@ -65,9 +113,11 @@ const viewgrievanceReport = async (req, res) => {
 
     const responseData = {
       status: grievance.status,
-      student: grievance.studentId, // ✅ now sending full student info
+      student: grievance.studentId,
       subject: grievance.grievanceTitle,
-      reportText: report.reportText,
+      briefHistory: report.briefHistory,
+      findings: report.findings,
+      recommendations: report.recommendations || [],
       attachment: report.fileUrl || null,
     };
 
@@ -76,7 +126,6 @@ const viewgrievanceReport = async (req, res) => {
       message: "Grievance report fetched successfully.",
       data: responseData,
     });
-
   } catch (error) {
     console.error("Error in viewGrievanceReport:", error);
     res.status(500).json({

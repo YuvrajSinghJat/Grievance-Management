@@ -200,7 +200,9 @@ const viewAllGrievancesByEmployee = asyncHandler(async (req, res, next) => {
       { "committeeMembers.employeeId": employeeId }, // Committee member
       { "chairman.employeeId": employeeId }          // Chairman of the committee
     ]
-  }).lean(); // lean() makes it plain JS objects, easier to modify
+  })
+  .populate("studentId", "name scholarNo email")
+  .lean(); // lean() makes it plain JS objects, easier to modify
 
   // Transform status for employee view
   const modifiedGrievances = grievances.map(g => {
