@@ -1,0 +1,32 @@
+[33m2df8d59[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33m307e0d1[m HEAD@{1}: commit: created profile controller
+[33m92e18ad[m HEAD@{2}: commit (merge): fixed
+[33ma0c2bc0[m HEAD@{3}: commit: demo
+[33m03dd07e[m HEAD@{4}: commit: resolved grievance form
+[33m1b2032b[m HEAD@{5}: commit: fix signup
+[33m94a4ad4[m HEAD@{6}: commit: Force added .env file
+[33ma646fc8[m HEAD@{7}: commit: added env file
+[33mec95fa9[m HEAD@{8}: commit: ignore the env file
+[33m86ae76f[m HEAD@{9}: commit: Remove .env from version control
+[33mb797e67[m HEAD@{10}: commit: created controller for forgotPassword
+[33m3928bb1[m HEAD@{11}: commit: create controller for vc,dosa,registrar
+[33mec0c47d[m HEAD@{12}: commit: improved indexing
+[33m552aa49[m HEAD@{13}: commit: hardcoded vc , dosa and registrar credentials
+[33mfb48fe7[m HEAD@{14}: commit: create createComitte logics
+[33m496711e[m HEAD@{15}: commit: build logic for getfaculty at comitteepage
+[33m7e1899c[m HEAD@{16}: commit: created viewallstudent controller
+[33m4adb451[m HEAD@{17}: commit: fix create admin controller
+[33m17ec413[m HEAD@{18}: commit: fix controller of admin grievance view
+[33mfedf17d[m HEAD@{19}: commit: route check
+[33mea23d22[m HEAD@{20}: commit: employee gravience
+[33m5fb0633[m HEAD@{21}: commit: tokens verification
+[33m6c6e364[m HEAD@{22}: commit: tested admin logic
+[33m170e986[m HEAD@{23}: commit: updated index.js
+[33mc7cd954[m HEAD@{24}: commit: common authentication for all
+[33mfb887d3[m HEAD@{25}: commit: common authentication for all
+[33m83ecba1[m HEAD@{26}: commit: some changes for connection
+[33m7b26a7c[m HEAD@{27}: commit: mongodb url changed
+[33m0b507a7[m HEAD@{28}: commit: port check
+[33me4821e8[m HEAD@{29}: pull: Fast-forward
+[33m6db23be[m HEAD@{30}: commit: commit by anurag
+[33m9a2b2aa[m HEAD@{31}: clone: from https://github.com/YuvrajSinghJat/Grievance-Management.git
