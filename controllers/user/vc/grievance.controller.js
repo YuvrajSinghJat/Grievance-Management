@@ -108,11 +108,17 @@ const getAllVcRejectedGrievances = asyncHandler(async (req, res) => {
   try {
     console.log("Hitting getAllVcRejectedGrievances");
 
-    const grievances = await Grievance.find({
-      status: "Rejected",
-      rejectedBy: "VC",
-    }).populate("studentId", "name email")
-      .select("_id grievanceTitle grievanceType status proof scholarNo rejectedDate rejectionReason studentId");
+    // const grievances = await Grievance.find({
+    //   status: "Rejected",
+    //   rejectedBy: "VC",
+    // }).populate("studentId", "name email")
+    //   .select("_id grievanceTitle grievanceType status proof scholarNo rejectedDate rejectionReason studentId");
+     const grievances = await Grievance.find({
+    status: "Rejected by VC"
+    })
+    .populate("studentId", "name email")
+    .select("_id grievanceTitle grievanceType status proof scholarNo rejectedDate rejectionReason studentId");
+
 
     if (!grievances || grievances.length === 0) {
       return res.status(404).json({ success: false, message: "No VC rejected grievances found" });
