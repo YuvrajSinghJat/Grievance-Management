@@ -52,7 +52,6 @@ app.get("/", (req, res) => {
 
 
 
-
 // Prevent browser from caching protected pages
 app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
