@@ -9,14 +9,14 @@ const { ApiError } = require("../../../utility/ApiError.js");
 
 const jwt = require("jsonwebtoken");
 
-// ✅ Secure cookie options
+
 const options = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "Lax",
 };
 
-// ✅ Generate Access and Refresh Tokens
+
 const createAccessAndRefreshToken = async (_id) => {
   const user = await Student.findById(_id);
   if (!user) throw new ApiError(404, "Student not found");
@@ -30,7 +30,7 @@ const createAccessAndRefreshToken = async (_id) => {
   return { accessToken, refreshToken };
 };
 
-// ✅ Student Signup (No bcrypt)
+
 const signup = asyncHandler(async (req, res) => {
   const {
     enrollmentNo,
@@ -46,10 +46,15 @@ const signup = asyncHandler(async (req, res) => {
     parentContactNo,
   } = req.body;
 
+
   if (!enrollmentNo || !name || !email || !password) {
     throw new ApiError(400, "Required fields are missing");
   }
 
+  const allowedDomain = /@medicaps\.ac\.in$/;
+  if (!allowedDomain.test(email)) {
+    throw new ApiError(403, "Registration allowed only with @medicaps.ac.in email");
+  }
   const existingEmail = await Student.findOne({ email });
   if (existingEmail) {
     throw new ApiError(409, "Email already registered");
@@ -60,7 +65,7 @@ const signup = asyncHandler(async (req, res) => {
     scholarNo,
     name,
     email,
-    password, // Store as plain text (⚠️ NOT recommended in production)
+    password, 
     mobileNo,
     department,
     faculty,
@@ -80,25 +85,36 @@ const signup = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, studentDetails, "Student registered successfully"));
 });
 
-// ✅ Student Signin (No bcrypt)
+
 const signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  
   if (!email || !password) {
     throw new ApiError(400, "Email and password are required");
   }
 
+ 
+  const allowedDomain = /@medicaps\.ac\.in$/;
+  if (!allowedDomain.test(email)) {
+    throw new ApiError(403, "Login allowed only with @medicaps.ac.in email");
+  }
+
+ 
   const student = await Student.findOne({ email });
   if (!student || student.password !== password) {
     throw new ApiError(401, "Invalid email or password");
   }
 
+  
   const { accessToken, refreshToken } = await createAccessAndRefreshToken(student._id);
 
+  
   const user = await Student.findById(student._id).select("-password -refreshToken");
   if (!user) {
     throw new ApiError(500, "User not found after token generation");
   }
+
 
   return res
     .status(200)
@@ -107,7 +123,7 @@ const signin = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { ...user._doc, role: "student" }, "Login successful"));
 });
 
-// ✅ Student Logout
+
 const logout = asyncHandler(async (req, res) => {
   await Student.findByIdAndUpdate(req.verificationOfUser._id, {
     $unset: { refreshToken: "" },
@@ -120,7 +136,7 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Logged out successfully"));
 });
 
-// 🔒 Placeholder: Employee Auth
+
 const employeeSignin = asyncHandler(async (req, res) => {
   res.send("Employee login logic not implemented");
 });
